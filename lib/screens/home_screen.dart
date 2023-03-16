@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../components/estimated_cost.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -11,17 +13,27 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool userDetails = false;
   bool isEstimatesShowing = false;
+  bool showCalculatedEstimate = false;
   int currentIndex = 0;
   int viewIndex = 0;
   int backCount = 0;
 
-  void _toggleDetails() {
+  void _toggleDetails(bool isEstimate) {
     setState(() {
       isEstimatesShowing = !isEstimatesShowing;
       backCount = 1;
+
       // viewIndex = index;
       // userDetails = true;
       print('View Clicked $backCount ');
+    });
+  }
+
+  void toggleEstimatedCosts() {
+    setState(() {
+      showCalculatedEstimate = !showCalculatedEstimate;
+      debugPrint(showCalculatedEstimate.toString());
+      backCount = 1;
     });
   }
 
@@ -144,11 +156,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Colors.black,
                           ),
                         ),
-                        rowTiles('Name', 'ABC'),
-                        rowTiles('Location', 'ABC'),
+                        if (showCalculatedEstimate == true)
+                          const EstimatedCost(),
+                        if (showCalculatedEstimate == false)
+                          rowTiles('Name', 'ABC'),
+                        if (showCalculatedEstimate == false)
+                          rowTiles('Location', 'ABC'),
                         clickableTiles('Estimates', 'View', index),
                         clickableTiles('Total Estimates', 'Calculate', index),
-                        if (isEstimatesShowing == true)
+                        if (isEstimatesShowing == true ||
+                            showCalculatedEstimate == true)
                           rowTiles('Paint', '12 gillons'),
                         if (isEstimatesShowing == true)
                           rowTiles('Wall cleaner', '5'),
@@ -161,16 +178,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (isEstimatesShowing == true)
                           rowTiles('Window area', '100sqft'),
                         const SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            FaIcon(FontAwesomeIcons.whatsapp),
-                            FaIcon(
-                              FontAwesomeIcons.phone,
-                              size: 20,
-                            ),
-                          ],
-                        ),
+                        if (isEstimatesShowing == false)
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              FaIcon(FontAwesomeIcons.whatsapp),
+                              FaIcon(
+                                FontAwesomeIcons.phone,
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         const SizedBox(height: 5),
                         InkWell(
                           onTap: () {
@@ -258,7 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isEstimatesShowing == false)
+          if (isEstimatesShowing == false && showCalculatedEstimate == false)
             Text(
               title,
               style: const TextStyle(
@@ -267,10 +285,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Sansita'),
             ),
-          if (isEstimatesShowing == false)
+          if (isEstimatesShowing == false && showCalculatedEstimate == false)
             InkWell(
               onTap: () {
-                _toggleDetails();
+                debugPrint(clickable);
+                switch (clickable) {
+                  case 'View':
+                    _toggleDetails(true);
+                    break;
+                  case 'Calculate':
+                    toggleEstimatedCosts();
+                    break;
+                }
               },
               child: Text(
                 clickable,
