@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -68,9 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 34),
             decoration: BoxDecoration(
               image: const DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/bg.png')
-              ),
+                  fit: BoxFit.cover, image: AssetImage('assets/images/bg.png')),
               borderRadius: BorderRadius.circular(35),
             ),
             child: Column(
@@ -173,7 +173,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: TextField(
                           controller: _nameController,
                           keyboardType: TextInputType.name,
-                          decoration: const InputDecoration(hintText: 'Name',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                          decoration: const InputDecoration(
+                              hintText: 'Name',
+                              hintStyle: TextStyle(
+                                fontFamily: 'Sansita',
+                              )),
                         ),
                       )
                     : Container(),
@@ -188,7 +192,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(hintText: 'Email',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                    decoration: const InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Sansita',
+                        )),
                   ),
                 ),
 
@@ -203,7 +211,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     keyboardType: TextInputType.visiblePassword,
                     obscureText: true,
-                    decoration: const InputDecoration(hintText: 'Password',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                    decoration: const InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Sansita',
+                        )),
                   ),
                 ),
 
@@ -215,22 +227,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     top: 60,
                   ),
                   child: InkWell(
-                    // onTap: () => Navigator.push(
-                    //   context,
-                    //   PageTransition(
-                    //     type: PageTransitionType.rightToLeft,
-                    //     //duration: Duration(seconds: 1),
-                    //     child: VerificationCode(),
-                    //     curve: Curves.easeInOut,
-                    //   ),
-                    // ),
-                    // onTap: () => appCredentials(context),
+                    onTap: () => Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => const HomeScreen()),
+                        (route) => false),
                     child: Container(
                       height: 52,
                       decoration: BoxDecoration(
-                        gradient: buttonGradient,
+                          gradient: buttonGradient,
                           color: Colors.blue,
-                          borderRadius: const BorderRadius.all(Radius.circular(30))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(30))),
                       child: const Center(
                         child: Text(
                           'Login',
