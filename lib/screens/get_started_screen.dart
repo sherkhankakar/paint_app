@@ -1,7 +1,6 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/login_screen.dart';
-import 'package:paint_app/screens/selection_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({Key? key}) : super(key: key);
@@ -17,14 +16,14 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
       body: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromRGBO(0, 240, 255, 1),
-            Color.fromRGBO(158, 0, 255, 0.82),
-            Color.fromRGBO(82, 0, 255, 0.77)
-          ],
-        )),
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(0, 240, 255, 1),
+                Color.fromRGBO(158, 0, 255, 0.82),
+                Color.fromRGBO(82, 0, 255, 0.77)
+              ],
+            )),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,8 +53,8 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 'Welcome:\nThis app for painter an the user who'
-                ' hire painter to complete their home painting task'
-                ' its easy to use for everyone for seller and for buyer',
+                    ' hire painter to complete their home painting task'
+                    ' its easy to use for everyone for seller and for buyer',
                 style: TextStyle(
                     color: Colors.white, fontSize: 18, fontFamily: 'Sansita'),
               ),
@@ -109,7 +108,10 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   controller.loading(); //starts loading animation
                   await Future.delayed(const Duration(seconds: 1));
                   controller.success();
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const LoginScreen()));
                   await Future.delayed(const Duration(seconds: 1));
                   controller.reset(); //resets the slider
                 },
