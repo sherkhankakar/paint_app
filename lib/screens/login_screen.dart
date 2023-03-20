@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/home_screen.dart';
-import 'package:paint_app/screens/selection_screen.dart';
+
+import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,7 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phnController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPassController = TextEditingController();
 
   // Controller
 
@@ -79,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               child: Column(
                 children: [
-                  const SizedBox(height: 90),
+                  const SizedBox(height: 50),
 
                   /// Sign in  &  Sign up Widget
                   Container(
@@ -116,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 16,
                                   color: _switchingSignInAndSignUp == true
                                       ? Colors.white
-                                      : const Color(0xFF998FA2).withOpacity(0.6),
+                                      : const Color.fromRGBO(48, 68, 253, 1),
                                   letterSpacing: 0.048,
                                   fontWeight: FontWeight.w600,
                                   height: 1.6,
@@ -152,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 15,
                                   color: _switchingSignInAndSignUp == false
                                       ? Colors.white
-                                      : const Color(0xFF998FA2).withOpacity(0.6),
+                                      : const Color.fromRGBO(48, 68, 253, 1),
                                   letterSpacing: 0.048,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -176,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             controller: _nameController,
                             keyboardType: TextInputType.name,
-                            decoration: const InputDecoration(hintText: 'Name',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                            decoration: const InputDecoration(hintText: 'Name',hintStyle: TextStyle(color: Colors.white, fontFamily: 'Sansita',)),
                           ),
                         )
                       : Container(),
@@ -191,9 +194,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(hintText: 'Email',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                      decoration: const InputDecoration(hintText: 'Email',hintStyle: TextStyle(color: Colors.white, fontFamily: 'Sansita',)),
                     ),
                   ),
+
+                  _switchingSignInAndSignUp == false
+                      ? Padding(
+                    padding: const EdgeInsets.only(
+                      left: 40,
+                      right: 40,
+                      top: 10,
+                    ),
+                    child: TextField(
+                      controller: _phnController,
+                      keyboardType: TextInputType.phone,
+                      decoration: const InputDecoration(hintText: 'Contact Number',hintStyle: TextStyle(color: Colors.white, fontFamily: 'Sansita',)),
+                    ),
+                  )
+                      : Container(),
 
                   /// Password Field Widget
                   Padding(
@@ -206,9 +224,51 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
-                      decoration: const InputDecoration(hintText: 'Password',hintStyle: TextStyle(fontFamily: 'Sansita',)),
+                      decoration: const InputDecoration(hintText: 'Password',hintStyle: TextStyle(color: Colors.white, fontFamily: 'Sansita',)),
                     ),
                   ),
+                  _switchingSignInAndSignUp == false
+                      ? Padding(
+                    padding: const EdgeInsets.only(
+                      left: 40,
+                      right: 40,
+                      top: 10,
+                    ),
+                    child: TextField(
+                      controller: _confirmPassController,
+                      keyboardType: TextInputType.visiblePassword,
+                      obscureText: true,
+                      decoration: const InputDecoration(hintText: 'Confirm Password',hintStyle: TextStyle(color: Colors.white, fontFamily: 'Sansita',)),
+                    ),
+                  )
+                      : Container(),
+
+                  _switchingSignInAndSignUp == true
+                      ? Align(
+                    alignment: Alignment.topRight ,
+                    child: InkWell(
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => const ForgotPassword()),
+                      ),
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.only(right: 30),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            fontFamily: 'Sansita',
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          //  height: 2.17,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                      : Container(),
 
                   /// Continue Button Widget
                   Padding(
@@ -237,9 +297,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           gradient: buttonGradient,
                             color: Colors.blue,
                             borderRadius: const BorderRadius.all(Radius.circular(30))),
-                        child: const Center(
-                          child: Text(
+                        child: Center(
+                          child:
+                          _switchingSignInAndSignUp == true ?
+                          const Text(
                             'Login',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Sansita'),
+                            textAlign: TextAlign.center,
+                          ):const Text(
+                            'Sign Up',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
@@ -253,30 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                   /// Forgot Password Widget
-                  _switchingSignInAndSignUp == true
-                      ? Align(
-                          alignment: Alignment.center,
-                          child: InkWell(
-                            // onTap: () => Navigator.of(context).push(
-                            //   MaterialPageRoute(
-                            //       builder: (_) => const ForgotPassword()),
-                            // ),
-                            child: Container(
-                              margin: const EdgeInsets.only(top: 30),
-                              child: const Text(
-                                'FORGOT PASSWORD',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xFF8A56AC),
-                                  letterSpacing: 0.048,
-                                  fontWeight: FontWeight.w600,
-                                  height: 2.17,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      : Container(),
+
                 ],
               ),
             )
