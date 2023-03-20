@@ -33,12 +33,21 @@ class EstimatedCost extends StatelessWidget {
         const Divider(
           thickness: 0.4,
           color: Colors.black54,
-        )
+        ),
+
+          rowTiles('Paint', '12 gillons', cost: '20000'),
+          rowTiles('Wall Cleaner', '5',cost: '1000'),
+          rowTiles('Painter\'s tape', '2',cost: '2000'),
+          rowTiles('Brushes', '12',cost: '3000'),
+          rowTiles('Wall Area', '100sqft',cost: '/'),
+          rowTiles('Door Area', '100sqft',cost: '/'),
+          rowTiles('Window Area', '100sqft',cost: '/'),
+          rowTiles('Wall Area', '100sqft', cost:'/'),
       ],
     );
   }
 
-  calculateRowTiles(String name, String result){
+  rowTiles(String name, String result, {String? cost}){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(

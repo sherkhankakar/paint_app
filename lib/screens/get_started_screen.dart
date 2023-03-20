@@ -1,6 +1,7 @@
 import 'package:action_slider/action_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/login_screen.dart';
+import 'package:paint_app/screens/selection_screen.dart';
 
 class GetStartedScreen extends StatefulWidget {
   const GetStartedScreen({Key? key}) : super(key: key);
@@ -111,7 +112,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
+                          builder: (context) => const SelectionScreen()));
                   await Future.delayed(const Duration(seconds: 1));
                   controller.reset(); //resets the slider
                 },

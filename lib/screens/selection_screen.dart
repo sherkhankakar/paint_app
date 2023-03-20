@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paint_app/screens/bottom_bar_screen.dart';
-import 'package:paint_app/screens/home_screen.dart';
+import 'package:paint_app/screens/login_screen.dart';
+import 'package:paint_app/screens/seller_category.dart';
 
 class SelectionScreen extends StatefulWidget {
   const SelectionScreen({Key? key}) : super(key: key);
@@ -29,40 +29,40 @@ class _SelectionScreenState extends State<SelectionScreen> {
           child: Column(
             children: [
               const SizedBox(height: 50),
-              GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const BottomBarScreen()));
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/cons.png",
-                      height: 45,
-                      width: 160,
-                    ),
-                    Image.asset(
-                      "assets/images/est.png",
-                      height: 25,
-                      width: 120,
-                    ),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/cons.png",
+                    height: 45,
+                    width: 160,
+                  ),
+                  Image.asset(
+                    "assets/images/est.png",
+                    height: 25,
+                    width: 120,
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               Stack(
                 children: [
                   Transform.translate(
                     offset: const Offset(0,15),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/seller.png',
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const SellerCategory()));
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/seller.png',
 
+                          ),
                         ),
                       ),
                     ),
@@ -100,16 +100,21 @@ class _SelectionScreenState extends State<SelectionScreen> {
               const SizedBox(height: 40),
               Stack(
                 children: [
-                  Transform.translate(
-                    offset: const Offset(0,15),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Image.asset(
-                          'assets/images/buyer.png',
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                    },
+                    child: Transform.translate(
+                      offset: const Offset(0,15),
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/images/buyer.png',
+                          ),
                         ),
                       ),
                     ),

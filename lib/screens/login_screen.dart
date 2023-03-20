@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/home_screen.dart';
 import 'package:paint_app/screens/selection_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -218,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     child: InkWell(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const SelectionScreen()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const HomeScreen()));
                       },
                       // onTap: () => Navigator.push(
                       //   context,

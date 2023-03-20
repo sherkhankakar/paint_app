@@ -164,30 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           rowTiles('Location', 'ABC'),
                         clickableTiles('Estimates', 'View', index),
                         clickableTiles('Total Estimates', 'Calculate', index),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Paint', '12 gillons', '20000'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Wall Cleaner', '5', '1000'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Painter\'s tape', '2', '2000'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Brushes', '12', '3000'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Wall Area', '100sqft', '/'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Door Area', '100sqft', '/'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Window Area', '100sqft', '/'),
-                        if (isEstimatesShowing == true ||
-                            showCalculatedEstimate == true)
-                          rowTiles('Wall Area', '100sqft', '/'),
+
                         if (isEstimatesShowing == true)
                           rowTiles('Wall cleaner', '5'),
                         if (isEstimatesShowing == true)
@@ -199,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (isEstimatesShowing == true)
                           rowTiles('Window area', '100sqft'),
                         const SizedBox(height: 5),
-                        if (isEstimatesShowing == false)
+                        if (isEstimatesShowing == false && showCalculatedEstimate ==false)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: const [
@@ -217,6 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               switch (backCount) {
                                 case 1:
                                   isEstimatesShowing = false;
+                                  showCalculatedEstimate =false;
                                   backCount = 0;
                                   break;
                                 // case 2:
@@ -326,6 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Text(
                 clickable,
+                textAlign: TextAlign.center,
                 style: const TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.white,
@@ -339,15 +318,15 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  rowTiles(String name, String result, [String? cost]) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      //crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 3,
-          child: Text(
+  rowTiles(String name, String result, {String? cost}) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
             name,
             style: const TextStyle(
                 color: Colors.white,
@@ -355,27 +334,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Sansita'),
           ),
-        ),
-        Expanded(
-          flex: 2,
-          child: Text(
+          Spacer(),
+          Text(
             result,
+            textAlign: TextAlign.center,
             style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Sansita'),
           ),
-        ),
-        Text(
-          cost!,
-          style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              fontFamily: 'Sansita'),
-        ),
-      ],
+          Text(
+            cost ?? '',
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Sansita'),
+          ),
+        ],
+      ),
     );
   }
 }
