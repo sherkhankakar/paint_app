@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: () {
-              _toggleDetails();
+              _toggleDetails(false);
               // setState(() {
               //   isEstimatesShowing = !isEstimatesShowing;
               //   // viewIndex = index;
