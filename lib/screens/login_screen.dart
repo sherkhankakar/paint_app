@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/home_screen.dart';
 
+import '../services/firebase_services.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,9 +12,14 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey expansionTile = GlobalKey();
   bool _switchingSignInAndSignUp = true;
 
-  final GlobalKey expansionTile = GlobalKey();
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
+
+  final AuthService _authService = AuthService();
+
+  String _errorMessage = '';
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -297,29 +303,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       : Container(),
 
                   /// Continue Button Widget
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 40,
-                      right: 40,
-                      top: 60,
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomeScreen()));
-                      },
-                      // onTap: () => Navigator.push(
-                      //   context,
-                      //   PageTransition(
-                      //     type: PageTransitionType.rightToLeft,
-                      //     //duration: Duration(seconds: 1),
-                      //     child: VerificationCode(),
-                      //     curve: Curves.easeInOut,
-                      //   ),
-                      // ),
-                      // onTap: () => appCredentials(context),
+                  InkWell(
+                    onTap: () {
+                      _isLoading.value = true;
+                      _switchingSignInAndSignUp == false
+                          ? _authService
+                              .createUserWithEmailAndPassword(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                                name: _nameController.text.trim(),
+                                mobile: _phnController.text.trim(),
+                                address: 'Pakistan',
+                              )
+                              .whenComplete(() => _isLoading.value = false)
+                          : _authService
+                              .signInWithEmailAndPassword(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                              )
+                              .whenComplete(() => _isLoading.value = false);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        left: 40,
+                        right: 40,
+                        top: 60,
+                      ),
                       child: Container(
                         height: 52,
                         decoration: BoxDecoration(
@@ -328,25 +337,35 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(30))),
                         child: Center(
-                          child: _switchingSignInAndSignUp == true
-                              ? const Text(
-                                  'Login',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Sansita'),
-                                  textAlign: TextAlign.center,
-                                )
-                              : const Text(
-                                  'Sign Up',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: 'Sansita'),
-                                  textAlign: TextAlign.center,
-                                ),
+                          child: ValueListenableBuilder(
+                            valueListenable: _isLoading,
+                            builder: (BuildContext context, dynamic value,
+                                Widget? child) {
+                              return _switchingSignInAndSignUp == true
+                                  ? _isLoading.value == true
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          'Login',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Sansita'),
+                                          textAlign: TextAlign.center,
+                                        )
+                                  : _isLoading.value == true
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          'Sign Up',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600,
+                                              fontFamily: 'Sansita'),
+                                          textAlign: TextAlign.center,
+                                        );
+                            },
+                          ),
                         ),
                       ),
                     ),
@@ -360,5 +379,33 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     ));
+  }
+
+  signUp() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    if (email.isNotEmpty && password.isNotEmpty) {
+      final user = await _authService.createUserWithEmailAndPassword(
+        email,
+        password,
+        name: _nameController.text.trim(),
+        address: _phnController.text.trim(),
+      );
+      if (user != null) {
+        // ignore: use_build_context_synchronously
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => const HomeScreen(),
+            ),
+            (route) => false);
+      } else {
+        setState(() {
+          _errorMessage = 'Invalid email or password';
+        });
+      }
+    } else {
+      debugPrint('please provide the above details');
+    }
   }
 }
