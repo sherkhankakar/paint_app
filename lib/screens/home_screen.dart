@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../components/estimated_costs.dart';
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -100,176 +98,145 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(40),
           color: const Color.fromRGBO(40, 124, 210, 0.6)),
       child: Center(
-        child: GestureDetector(
-          onTap: () {
-            setState(() {
-              currentIndex = index;
-              userDetails = true;
-            });
-          },
-          child: currentIndex == index
-              ? !userDetails
-                  ? Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Color.fromRGBO(133, 131, 131, 1),
+          child: GestureDetector(
+        onTap: () {
+          setState(() {
+            currentIndex = index;
+            userDetails = true;
+          });
+        },
+        child: currentIndex == index
+            ? !userDetails
+                ? Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 50,
+                        backgroundColor: Color.fromRGBO(133, 131, 131, 1),
+                      ),
+                      const SizedBox(width: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          SizedBox(height: 10),
+                          Text(
+                            'Name',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Sansita'),
+                          ),
+                          Text(
+                            'Amet minim mollit non deserunt\n'
+                            'ullamco est sit aliqua dolor do amet\n'
+                            'sint. Velit officia consequat duis enim\n'
+                            'velit mollit. Exercitation veniam\n'
+                            'consequat sunt nostrud amet.',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontFamily: 'Sansita'),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                : Column(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 25,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 80),
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.black,
                         ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            SizedBox(height: 10),
-                            Text(
-                              'Name',
+                      ),
+                      rowTiles('Name', 'ABC'),
+                      rowTiles('Location', 'ABC'),
+                      clickableTiles('Estimates', 'View', index),
+                      clickableTiles('Total Estimates', 'Calculate', index),
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          FaIcon(FontAwesomeIcons.whatsapp),
+                          FaIcon(
+                            FontAwesomeIcons.phone,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            userDetails = false;
+                          });
+                        },
+                        child: Container(
+                          height: 30,
+                          width: 110,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: [
+                                  Color.fromRGBO(26, 41, 128, 1),
+                                  Color.fromRGBO(38, 208, 206, 1),
+                                ],
+                              )),
+                          child: const Center(
+                            child: Text(
+                              'Back',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
                                   fontFamily: 'Sansita'),
                             ),
-                            Text(
-                              'Amet minim mollit non deserunt\n'
-                              'ullamco est sit aliqua dolor do amet\n'
-                              'sint. Velit officia consequat duis enim\n'
-                              'velit mollit. Exercitation veniam\n'
-                              'consequat sunt nostrud amet.',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12,
-                                  fontFamily: 'Sansita'),
-                            ),
-                          ],
-                        )
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        const CircleAvatar(
-                          backgroundColor: Colors.black,
-                          radius: 25,
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 80),
-                          child: Divider(
-                            thickness: 0.8,
-                            color: Colors.black54,
                           ),
                         ),
-                        if (showCalculatedEstimate == true)
-                          const EstimatedCost(),
-                        if (showCalculatedEstimate == false)
-                          rowTiles('Name', 'ABC'),
-                        if (showCalculatedEstimate == false)
-                          rowTiles('Location', 'ABC'),
-                        clickableTiles('Estimates', 'View', index),
-                        clickableTiles('Total Estimates', 'Calculate', index),
-
-                        if (isEstimatesShowing == true)
-                          rowTiles('Wall cleaner', '5'),
-                        if (isEstimatesShowing == true)
-                          rowTiles('Painter\'s Tape', '2'),
-                        if (isEstimatesShowing == true)
-                          rowTiles('Brushes', '12'),
-                        if (isEstimatesShowing == true)
-                          rowTiles('Wall area', '100sqft'),
-                        if (isEstimatesShowing == true)
-                          rowTiles('Window area', '100sqft'),
-                        const SizedBox(height: 5),
-                        if (isEstimatesShowing == false && showCalculatedEstimate ==false)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              FaIcon(FontAwesomeIcons.whatsapp),
-                              FaIcon(
-                                FontAwesomeIcons.phone,
-                                size: 20,
-                              ),
-                            ],
-                          ),
-                        const SizedBox(height: 5),
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              switch (backCount) {
-                                case 1:
-                                  isEstimatesShowing = false;
-                                  showCalculatedEstimate =false;
-                                  backCount = 0;
-                                  break;
-                                // case 2:
-                                //   showCalculatedEstimate = false;
-                                //   backCount = 0;
-                                //   break;
-
-                                default:
-                                  userDetails = false;
-                                  break;
-                              }
-                            });
-                          },
-                          child: Container(
-                            height: 30,
-                            width: 110,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                gradient: const LinearGradient(
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                  colors: [
-                                    Color.fromRGBO(26, 41, 128, 1),
-                                    Color.fromRGBO(38, 208, 206, 1),
-                                  ],
-                                )),
-                            child: const Center(
-                              child: Text(
-                                'Back',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontFamily: 'Sansita'),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    )
-              : Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 50,
-                      backgroundColor: Color.fromRGBO(133, 131, 131, 1),
-                    ),
-                    const SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        SizedBox(height: 10),
-                        Text(
-                          'Name',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: 'Sansita'),
-                        ),
-                        Text(
-                          'Amet minim mollit non deserunt\n'
-                          'ullamco est sit aliqua dolor do amet\n'
-                          'sint. Velit officia consequat duis enim\n'
-                          'velit mollit. Exercitation veniam\n'
-                          'consequat sunt nostrud amet.',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontFamily: 'Sansita'),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-        ),
-      ),
+                      )
+                    ],
+                  )
+            : Row(
+                children: [
+                  const CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Color.fromRGBO(133, 131, 131, 1),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      SizedBox(height: 10),
+                      Text(
+                        'Name',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita'),
+                      ),
+                      Text(
+                        'Amet minim mollit non deserunt\n'
+                        'ullamco est sit aliqua dolor do amet\n'
+                        'sint. Velit officia consequat duis enim\n'
+                        'velit mollit. Exercitation veniam\n'
+                        'consequat sunt nostrud amet.',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontFamily: 'Sansita'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+      )),
     );
   }
 
@@ -280,39 +247,49 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isEstimatesShowing == false && showCalculatedEstimate == false)
-            Text(
-              title,
+          Text(
+            title,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Sansita'),
+          ),
+          InkWell(
+            onTap: () {
+              _toggleDetails(false);
+              // setState(() {
+              //   isEstimatesShowing = !isEstimatesShowing;
+              //   // viewIndex = index;
+              //   // userDetails = true;
+              //   print('View Clicked ');
+              // });
+            },
+            child: Text(
+              clickable,
               style: const TextStyle(
+                  decoration: TextDecoration.underline,
                   color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Sansita'),
             ),
-          if (isEstimatesShowing == false && showCalculatedEstimate == false)
-            InkWell(
-              onTap: () {
-                debugPrint(clickable);
-                switch (clickable) {
-                  case 'View':
-                    _toggleDetails(true);
-                    break;
-                  case 'Calculate':
-                    toggleEstimatedCosts();
-                    break;
-                }
-              },
-              child: Text(
-                clickable,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: 'Sansita'),
-              ),
-            ),
+          ),
+          if (isEstimatesShowing)
+            Column(
+              children: const [
+                CircleAvatar(),
+                Text(
+                  'Name',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Sansita'),
+                ),
+                CircleAvatar()
+              ],
+            )
         ],
       ),
     );
@@ -320,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   rowTiles(String name, String result, {String? cost}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,7 +311,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Sansita'),
           ),
-          Spacer(),
           Text(
             result,
             textAlign: TextAlign.center,
