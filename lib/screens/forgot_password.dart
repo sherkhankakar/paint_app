@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paint_app/screens/home_screen.dart';
+import 'package:paint_app/screens/seller_home_screen.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});

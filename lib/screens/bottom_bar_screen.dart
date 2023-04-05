@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/selection_screen.dart';
 
-import 'home_screen.dart';
+import 'seller_home_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
   const BottomBarScreen({Key? key}) : super(key: key);
