@@ -48,10 +48,13 @@ class _SelectionScreenState extends State<SelectionScreen> {
               Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(0,15),
+                    offset: const Offset(0, 15),
                     child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const SellerCategory()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const SellerCategory()));
                       },
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 30),
@@ -61,7 +64,6 @@ class _SelectionScreenState extends State<SelectionScreen> {
                         child: Center(
                           child: Image.asset(
                             'assets/images/seller.png',
-
                           ),
                         ),
                       ),
@@ -80,8 +82,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               Color.fromRGBO(143, 0, 255, 1),
                               Color.fromRGBO(13, 179, 182, 1)
                             ],
-                          )
-                      ),
+                          )),
                       child: const Center(
                         child: Text(
                           'Seller',
@@ -94,18 +95,22 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       ),
                     ),
                   ),
-
                 ],
               ),
               const SizedBox(height: 40),
               Stack(
                 children: [
                   GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoginScreen(
+                                    userType: 'Customer',
+                                  )));
                     },
                     child: Transform.translate(
-                      offset: const Offset(0,15),
+                      offset: const Offset(0, 15),
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
@@ -132,8 +137,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               Color.fromRGBO(143, 0, 255, 1),
                               Color.fromRGBO(13, 179, 182, 1)
                             ],
-                          )
-                      ),
+                          )),
                       child: const Center(
                         child: Text(
                           'Buyer',
@@ -146,10 +150,8 @@ class _SelectionScreenState extends State<SelectionScreen> {
                       ),
                     ),
                   ),
-
                 ],
               ),
-
             ],
           ),
         ),

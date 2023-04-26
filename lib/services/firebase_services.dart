@@ -15,6 +15,7 @@ class AuthService {
   Future<dynamic> signInWithEmailAndPassword(
     String email,
     String password,
+    String userType,
   ) async {
     try {
       final url = Uri.parse(
@@ -42,7 +43,7 @@ class AuthService {
 
   // Sign up with email and password
   Future<dynamic> createUserWithEmailAndPassword(String email, String password,
-      {String? name, String? address, String? mobile}) async {
+      {String? name, String? address, String? mobile, String? userType}) async {
     try {
       final url = Uri.parse(
           'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=$apiKey');
@@ -70,6 +71,7 @@ class AuthService {
               'password': password,
               'address': address,
               'mobile': mobile,
+              'userType': userType,
             },
           ),
         );

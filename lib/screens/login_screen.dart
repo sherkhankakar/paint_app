@@ -5,7 +5,8 @@ import '../services/firebase_services.dart';
 import 'forgot_password.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({super.key, required this.userType});
+  final String userType;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -314,12 +315,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 name: _nameController.text.trim(),
                                 mobile: _phnController.text.trim(),
                                 address: 'Pakistan',
+                                userType: widget.userType,
                               )
                               .whenComplete(() => _isLoading.value = false)
                           : _authService
                               .signInWithEmailAndPassword(
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
+                                widget.userType,
                               )
                               .whenComplete(() => _isLoading.value = false);
                     },

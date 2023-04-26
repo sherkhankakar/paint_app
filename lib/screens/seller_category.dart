@@ -16,14 +16,14 @@ class _SellerCategoryState extends State<SellerCategory> {
         height: double.maxFinite,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(0, 240, 255, 1),
-                Color.fromRGBO(158, 0, 255, 0.82),
-                Color.fromRGBO(82, 0, 255, 0.77)
-              ],
-            )),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromRGBO(0, 240, 255, 1),
+            Color.fromRGBO(158, 0, 255, 0.82),
+            Color.fromRGBO(82, 0, 255, 0.77)
+          ],
+        )),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -47,10 +47,15 @@ class _SellerCategoryState extends State<SellerCategory> {
               Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(0,15),
+                    offset: const Offset(0, 15),
                     child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen(
+                                      userType: 'Painter',
+                                    )));
                       },
                       child: Container(
                         height: 140,
@@ -58,9 +63,8 @@ class _SellerCategoryState extends State<SellerCategory> {
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           image: const DecorationImage(
-                            image: AssetImage('assets/images/painter.jpg'),
-                            fit: BoxFit.cover
-                          ),
+                              image: AssetImage('assets/images/painter.jpg'),
+                              fit: BoxFit.cover),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         // child: Center(
@@ -88,8 +92,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                               Color.fromRGBO(143, 0, 255, 1),
                               Color.fromRGBO(13, 179, 182, 1)
                             ],
-                          )
-                      ),
+                          )),
                       child: const Center(
                         child: Text(
                           'Painter',
@@ -102,17 +105,21 @@ class _SellerCategoryState extends State<SellerCategory> {
                       ),
                     ),
                   ),
-
                 ],
               ),
               const SizedBox(height: 40),
               Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(0,15),
+                    offset: const Offset(0, 15),
                     child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen(
+                                      userType: 'Plumber',
+                                    )));
                       },
                       child: Container(
                         height: 140,
@@ -121,8 +128,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                               image: AssetImage('assets/images/plumber.jpg'),
-                              fit: BoxFit.cover
-                          ),
+                              fit: BoxFit.cover),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         // child: Center(
@@ -150,8 +156,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                               Color.fromRGBO(143, 0, 255, 1),
                               Color.fromRGBO(13, 179, 182, 1)
                             ],
-                          )
-                      ),
+                          )),
                       child: const Center(
                         child: Text(
                           'Plumber',
@@ -164,17 +169,21 @@ class _SellerCategoryState extends State<SellerCategory> {
                       ),
                     ),
                   ),
-
                 ],
               ),
               const SizedBox(height: 40),
               Stack(
                 children: [
                   Transform.translate(
-                    offset: const Offset(0,15),
+                    offset: const Offset(0, 15),
                     child: GestureDetector(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen(
+                                      userType: 'Tile Installer',
+                                    )));
                       },
                       child: Container(
                         height: 140,
@@ -183,8 +192,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                         decoration: BoxDecoration(
                           image: const DecorationImage(
                               image: AssetImage('assets/images/tile.jpg'),
-                              fit: BoxFit.cover
-                          ),
+                              fit: BoxFit.cover),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         // child: Center(
@@ -212,8 +220,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                               Color.fromRGBO(143, 0, 255, 1),
                               Color.fromRGBO(13, 179, 182, 1)
                             ],
-                          )
-                      ),
+                          )),
                       child: const Center(
                         child: Text(
                           'Tile Installer',
@@ -226,7 +233,6 @@ class _SellerCategoryState extends State<SellerCategory> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ],
