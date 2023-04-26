@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:paint_app/screens/home_screen.dart';
 
 import '../services/firebase_services.dart';
 import 'forgot_password.dart';
@@ -187,6 +186,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             controller: _nameController,
                             keyboardType: TextInputType.name,
+                            style: const TextStyle(
+                              color: Colors.white
+                            ),
                             decoration: const InputDecoration(
                                 hintText: 'Name',
                                 hintStyle: TextStyle(
@@ -207,6 +209,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      style: const TextStyle(
+                          color: Colors.white
+                      ),
                       decoration: const InputDecoration(
                           hintText: 'Email',
                           hintStyle: TextStyle(
@@ -226,6 +231,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             controller: _phnController,
                             keyboardType: TextInputType.phone,
+                            style: const TextStyle(
+                                color: Colors.white
+                            ),
                             decoration: const InputDecoration(
                                 hintText: 'Contact Number',
                                 hintStyle: TextStyle(
@@ -247,6 +255,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
+                      style: const TextStyle(
+                          color: Colors.white
+                      ),
                       decoration: const InputDecoration(
                           hintText: 'Password',
                           hintStyle: TextStyle(
@@ -266,6 +277,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _confirmPassController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
+                            style: const TextStyle(
+                                color: Colors.white
+                            ),
                             decoration: const InputDecoration(
                                 hintText: 'Confirm Password',
                                 hintStyle: TextStyle(
@@ -384,31 +398,31 @@ class _LoginScreenState extends State<LoginScreen> {
     ));
   }
 
-  signUp() async {
-    final email = _emailController.text.trim();
-    final password = _passwordController.text.trim();
-    if (email.isNotEmpty && password.isNotEmpty) {
-      final user = await _authService.createUserWithEmailAndPassword(
-        email,
-        password,
-        name: _nameController.text.trim(),
-        address: _phnController.text.trim(),
-      );
-      if (user != null) {
-        // ignore: use_build_context_synchronously
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (ctx) => const HomeScreen(),
-            ),
-            (route) => false);
-      } else {
-        setState(() {
-          _errorMessage = 'Invalid email or password';
-        });
-      }
-    } else {
-      debugPrint('please provide the above details');
-    }
-  }
+  // signUp() async {
+  //   final email = _emailController.text.trim();
+  //   final password = _passwordController.text.trim();
+  //   if (email.isNotEmpty && password.isNotEmpty) {
+  //     final user = await _authService.createUserWithEmailAndPassword(
+  //       email,
+  //       password,
+  //       name: _nameController.text.trim(),
+  //       address: _phnController.text.trim(),
+  //     );
+  //     if (user != null) {
+  //       // ignore: use_build_context_synchronously
+  //       Navigator.pushAndRemoveUntil(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (ctx) => const HomeScreen(),
+  //           ),
+  //           (route) => false);
+  //     } else {
+  //       setState(() {
+  //         _errorMessage = 'Invalid email or password';
+  //       });
+  //     }
+  //   } else {
+  //     debugPrint('please provide the above details');
+  //   }
+  // }
 }

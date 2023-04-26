@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/buyer_homescreen.dart';
 import 'package:paint_app/screens/login_screen.dart';
 import 'package:paint_app/screens/seller_category.dart';
 
@@ -101,6 +102,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
               Stack(
                 children: [
                   GestureDetector(
+<<<<<<< HEAD
                     onTap: () {
                       Navigator.push(
                           context,
@@ -108,6 +110,10 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               builder: (context) => const LoginScreen(
                                     userType: 'Customer',
                                   )));
+=======
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> const BuyerHomeScreen()));
+>>>>>>> 313b7dac8938ad006b200ef7665fedc6a06a5426
                     },
                     child: Transform.translate(
                       offset: const Offset(0, 15),
