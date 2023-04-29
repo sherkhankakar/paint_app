@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/electrician_estimation.dart';
+import 'package:paint_app/screens/marble_estimation.dart';
 import 'package:paint_app/screens/paint_estimation.dart';
+import 'package:paint_app/screens/plumbing_estimation.dart';
 
 class BuyerHomeScreen extends StatefulWidget {
   const BuyerHomeScreen({Key? key}) : super(key: key);
@@ -62,15 +65,15 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   gridContainers('    Paint\nEstimates', 'assets/images/painter.jpg',page: const PaintEstimation()),
-                  gridContainers('  Marbles\nEstimates', 'assets/images/painter.jpg')
+                  gridContainers('  Marbles\nEstimates', 'assets/images/painter.jpg',page: const MarbleEstimation())
                 ],
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  gridContainers('Electrician\nEstimates', 'assets/images/painter.jpg'),
-                  gridContainers('Plumbing\nEstimates', 'assets/images/plumber.jpg')
+                  gridContainers('Electrician\nEstimates', 'assets/images/painter.jpg',page: const ElectricianEstimation()),
+                  gridContainers('Plumbing\nEstimates', 'assets/images/plumber.jpg',page: const PlumbingEstimation())
                 ],
               ),
             ],

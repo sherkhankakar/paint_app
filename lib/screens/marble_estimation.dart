@@ -1,5 +1,4 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:paint_app/screens/hire_painter.dart';
 
@@ -9,15 +8,17 @@ class MyDataObject {
   MyDataObject({required this.id});
 }
 
-class PaintEstimation extends StatefulWidget {
-  const PaintEstimation({Key? key}) : super(key: key);
+class MarbleEstimation extends StatefulWidget {
+  const MarbleEstimation({Key? key}) : super(key: key);
 
   @override
-  State<PaintEstimation> createState() => _PaintEstimationState();
+  State<MarbleEstimation> createState() => _MarbleEstimationState();
 }
 
-class _PaintEstimationState extends State<PaintEstimation> {
-  final TextEditingController _coatNumberCtr = TextEditingController();
+class _MarbleEstimationState extends State<MarbleEstimation> {
+  final TextEditingController _tileLengthCtr = TextEditingController();
+  final TextEditingController _tileWidthCtr = TextEditingController();
+  final TextEditingController _tileGapCtr = TextEditingController();
   final TextEditingController _wallWidthCtr = TextEditingController();
   final TextEditingController _wallHeightCtr = TextEditingController();
   final TextEditingController _doorHeightCtr = TextEditingController();
@@ -29,18 +30,18 @@ class _PaintEstimationState extends State<PaintEstimation> {
   final List<MyDataObject> _doorList = [];
   final List<MyDataObject> _windowList = [];
 
-  final List<String> paintTypes = [
-    'Type 1',
-    'Type 2',
-    'Type 3',
-    'Type 4',
+  final List<String> tilesLength = [
+    'cm',
+    'ft',
+    'inch',
+    'm',
   ];
   String? selectedValue;
 
   List<DropdownMenuItem<String>> _addDividersAfterItems(
-      List<String> paintTypes) {
+      List<String> tilesLength) {
     List<DropdownMenuItem<String>> _menuItems = [];
-    for (var type in paintTypes) {
+    for (var type in tilesLength) {
       _menuItems.addAll(
         [
           DropdownMenuItem<String>(
@@ -55,7 +56,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
             ),
           ),
           //If it's last item, we will not add Divider after it.
-          if (type != paintTypes.last)
+          if (type != tilesLength.last)
             const DropdownMenuItem<String>(
               enabled: false,
               child: Divider(),
@@ -68,7 +69,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
 
   List<double> _getCustomItemsHeights() {
     List<double> _itemsHeights = [];
-    for (var i = 0; i < (paintTypes.length * 2) - 1; i++) {
+    for (var i = 0; i < (tilesLength.length * 2) - 1; i++) {
       if (i.isEven) {
         _itemsHeights.add(40);
       }
@@ -99,7 +100,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
         centerTitle: true,
         toolbarHeight: 60,
         title: const Text(
-          'Paint Estimation',
+          'Tiles Estimation',
           style: TextStyle(
               color: Colors.white,
               fontSize: 24,
@@ -117,39 +118,78 @@ class _PaintEstimationState extends State<PaintEstimation> {
         height: double.maxFinite,
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromRGBO(23, 213, 255, 1),
-            Color.fromRGBO(224, 26, 255, 0.9),
-          ],
-        )),
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(23, 213, 255, 1),
+                Color.fromRGBO(224, 26, 255, 0.9),
+              ],
+            )),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 120),
+                const Text(
+                  'Tiles Size',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Sansita',
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(0, 2.0),
+                            blurRadius: 5.0,
+                            color: Colors.black54),
+                      ]),
+                ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Paint Type',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Sansita',
-                          shadows: <Shadow>[
-                            Shadow(
-                                offset: Offset(0, 2.0),
-                                blurRadius: 5.0,
-                                color: Colors.black54),
-                          ]),
+                    const SizedBox(width: 70,
+                      child: Text(
+                        'Length',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
                     ),
                     Container(
                       height: 35,
-                      width: 200,
+                      width: 130,
+                      decoration: const BoxDecoration(color: Colors.white12),
+                      child: TextField(
+                        controller: _tileLengthCtr,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Sansita',
+                        ),
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '0.0',
+                            hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Sansita',
+                            )),
+                      ),
+                    ),
+                    Container(
+                      height: 35,
+                      width: 70,
+                      padding: const EdgeInsets.only(left: 1),
                       decoration: const BoxDecoration(color: Colors.white12),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton2(
@@ -160,14 +200,14 @@ class _PaintEstimationState extends State<PaintEstimation> {
                           ),
                           isExpanded: true,
                           hint: const Text(
-                            'Select Paint type',
+                            'cm',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 15,
                               fontFamily: 'Sansita',
                             ),
                           ),
-                          items: _addDividersAfterItems(paintTypes),
+                          items: _addDividersAfterItems(tilesLength),
                           value: selectedValue,
                           onChanged: (value) {
                             setState(() {
@@ -175,14 +215,14 @@ class _PaintEstimationState extends State<PaintEstimation> {
                             });
                           },
                           buttonStyleData:
-                              const ButtonStyleData(height: 40, width: 140),
+                          const ButtonStyleData(height: 40, width: 140),
                           dropdownStyleData: const DropdownStyleData(
                             decoration: BoxDecoration(color: Colors.black54),
                             maxHeight: 200,
                           ),
                           menuItemStyleData: MenuItemStyleData(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            const EdgeInsets.symmetric(horizontal: 8.0),
                             customHeights: _getCustomItemsHeights(),
                           ),
                         ),
@@ -190,44 +230,174 @@ class _PaintEstimationState extends State<PaintEstimation> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Coat',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Sansita',
-                          shadows: <Shadow>[
-                            Shadow(
-                                offset: Offset(0, 2.0),
-                                blurRadius: 5.0,
-                                color: Colors.black54),
-                          ]),
+                    const SizedBox(
+                      width: 70,
+                      child: Text(
+                        'Width',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
                     ),
                     Container(
                       height: 35,
-                      width: 200,
+                      width: 130,
                       decoration: const BoxDecoration(color: Colors.white12),
                       child: TextField(
-                        controller: _coatNumberCtr,
-                        keyboardType: TextInputType.name,
+                        controller: _tileWidthCtr,
+                        keyboardType: TextInputType.number,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Sansita',
                         ),
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Times',
+                            hintText: '0.0',
                             hintStyle: TextStyle(
                               color: Colors.white,
                               fontFamily: 'Sansita',
                             )),
                       ),
-                    )
+                    ),
+                    Container(
+                      height: 35,
+                      width: 70,
+                      padding: const EdgeInsets.only(left: 1),
+                      decoration: const BoxDecoration(color: Colors.white12),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          iconStyleData: const IconStyleData(
+                            iconEnabledColor: Colors.white,
+                            icon: Icon(Icons.keyboard_arrow_down_rounded),
+                            openMenuIcon: Icon(Icons.keyboard_arrow_up_rounded),
+                          ),
+                          isExpanded: true,
+                          hint: const Text(
+                            'cm',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontFamily: 'Sansita',
+                            ),
+                          ),
+                          items: _addDividersAfterItems(tilesLength),
+                          value: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          },
+                          buttonStyleData:
+                          const ButtonStyleData(height: 40, width: 140),
+                          dropdownStyleData: const DropdownStyleData(
+                            decoration: BoxDecoration(color: Colors.black54),
+                            maxHeight: 200,
+                          ),
+                          menuItemStyleData: MenuItemStyleData(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8.0),
+                            customHeights: _getCustomItemsHeights(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const SizedBox(
+                      width: 70,
+                      child: Text(
+                        'Tile Gap',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
+                    ),
+                    Container(
+                      height: 35,
+                      width: 130,
+                      decoration: const BoxDecoration(color: Colors.white12),
+                      child: TextField(
+                        controller: _tileGapCtr,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Sansita',
+                        ),
+                        decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '0.0',
+                            hintStyle: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Sansita',
+                            )),
+                      ),
+                    ),
+                    Container(
+                      height: 35,
+                      width: 70,
+                      padding: const EdgeInsets.only(left: 1),
+                      decoration: const BoxDecoration(color: Colors.white12),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          iconStyleData: const IconStyleData(
+                            iconEnabledColor: Colors.white,
+                            icon: Icon(Icons.keyboard_arrow_down_rounded),
+                            openMenuIcon: Icon(Icons.keyboard_arrow_up_rounded),
+                          ),
+                          isExpanded: true,
+                          hint: const Text(
+                            'cm',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontFamily: 'Sansita',
+                            ),
+                          ),
+                          items: _addDividersAfterItems(tilesLength),
+                          value: selectedValue,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedValue = value as String;
+                            });
+                          },
+                          buttonStyleData:
+                          const ButtonStyleData(height: 40, width: 140),
+                          dropdownStyleData: const DropdownStyleData(
+                            decoration: BoxDecoration(color: Colors.black54),
+                            maxHeight: 200,
+                          ),
+                          menuItemStyleData: MenuItemStyleData(
+                            padding:
+                            const EdgeInsets.symmetric(horizontal: 8.0),
+                            customHeights: _getCustomItemsHeights(),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -465,29 +635,31 @@ class _PaintEstimationState extends State<PaintEstimation> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showAlertDialog();
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromRGBO(110, 132, 255, 0.54),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20))),
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Sansita',
-                          shadows: <Shadow>[
-                            Shadow(
-                                offset: Offset(0, 2.0),
-                                blurRadius: 5.0,
-                                color: Colors.black54),
-                          ]),
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        showAlertDialog();
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                          const Color.fromRGBO(110, 132, 255, 0.54),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
                     ),
                   ),
                 )
@@ -678,30 +850,30 @@ class _PaintEstimationState extends State<PaintEstimation> {
       builder: (BuildContext context) {
         return StatefulBuilder(
             builder: ((context, setState) => AlertDialog(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  backgroundColor: const Color.fromRGBO(99, 98, 98, 1),
-                  content: SizedBox(
-                    height: 230,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        rowTiles('Paint Type', 'Cement Paint'),
-                        const SizedBox(height: 10),
-                        rowTiles('Coat', '4'),
-                        const SizedBox(height: 10),
-                        rowTiles('Total Area', '250 sq/ft'),
-                        const SizedBox(height: 10),
-                        rowTiles('Total Paint', '4 gillion'),
-                        const SizedBox(height: 10),
-                        rowTiles('Per Gillion Price', '2000 rs'),
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
-                  actions: [Center(child: okButton)],
-                )));
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20)),
+              backgroundColor: const Color.fromRGBO(99, 98, 98, 1),
+              content: SizedBox(
+                height: 230,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    rowTiles('Tile Size', '12 cm'),
+                    const SizedBox(height: 10),
+                    rowTiles('Tile Gap', '0.25 cm'),
+                    const SizedBox(height: 10),
+                    rowTiles('Total Area', '250 sq/ft'),
+                    const SizedBox(height: 10),
+                    rowTiles('Total Tiles', '50 tiles'),
+                    const SizedBox(height: 10),
+                    rowTiles('Per Gillion Price', '100 rs'),
+                    const SizedBox(height: 10),
+                  ],
+                ),
+              ),
+              actions: [Center(child: okButton)],
+            )));
       },
     );
   }

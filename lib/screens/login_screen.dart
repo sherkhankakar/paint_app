@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/seller_home_screen.dart';
 
 import '../services/firebase_services.dart';
 import 'forgot_password.dart';
@@ -335,7 +336,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
                               )
-                              .whenComplete(() => _isLoading.value = false);
+                              .whenComplete(() => const HomeScreen());
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(
