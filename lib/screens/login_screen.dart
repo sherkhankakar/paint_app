@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../services/firebase_services.dart';
 import 'forgot_password.dart';
+import 'seller_home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.userType});
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final AuthService _authService = AuthService();
 
-  String _errorMessage = '';
+  final String _errorMessage = '';
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -186,9 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             controller: _nameController,
                             keyboardType: TextInputType.name,
-                            style: const TextStyle(
-                              color: Colors.white
-                            ),
+                            style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                                 hintText: 'Name',
                                 hintStyle: TextStyle(
@@ -209,9 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: TextField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(
-                          color: Colors.white
-                      ),
+                      style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                           hintText: 'Email',
                           hintStyle: TextStyle(
@@ -231,9 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: TextField(
                             controller: _phnController,
                             keyboardType: TextInputType.phone,
-                            style: const TextStyle(
-                                color: Colors.white
-                            ),
+                            style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                                 hintText: 'Contact Number',
                                 hintStyle: TextStyle(
@@ -255,9 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       keyboardType: TextInputType.visiblePassword,
                       obscureText: true,
-                      style: const TextStyle(
-                          color: Colors.white
-                      ),
+                      style: const TextStyle(color: Colors.white),
                       decoration: const InputDecoration(
                           hintText: 'Password',
                           hintStyle: TextStyle(
@@ -277,9 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _confirmPassController,
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: true,
-                            style: const TextStyle(
-                                color: Colors.white
-                            ),
+                            style: const TextStyle(color: Colors.white),
                             decoration: const InputDecoration(
                                 hintText: 'Confirm Password',
                                 hintStyle: TextStyle(
@@ -334,11 +325,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               .whenComplete(() => _isLoading.value = false)
                           : _authService
                               .signInWithEmailAndPassword(
-                                _emailController.text.trim(),
-                                _passwordController.text.trim(),
-                                widget.userType,
-                              )
-                              .whenComplete(() => _isLoading.value = false);
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                              widget.userType,
+                            )
+                              .whenComplete(() {
+                              _isLoading.value = false;
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (ctx) => const HomeScreen()),
+                                (route) => false,
+                              );
+                            });
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(

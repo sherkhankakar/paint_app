@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
@@ -66,6 +68,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
         itemsHeights.add(4);
       }
     }
+    log(itemsHeights.toString());
     return itemsHeights;
   }
 
@@ -137,7 +140,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
                           ]),
                     ),
                     Container(
-                      height: 35,
+                      // height: 35,
                       width: 200,
                       decoration: const BoxDecoration(color: Colors.white12),
                       child: DropdownButtonHideUnderline(
@@ -164,10 +167,9 @@ class _PaintEstimationState extends State<PaintEstimation> {
                             decoration: BoxDecoration(color: Colors.black54),
                             maxHeight: 200,
                           ),
-                          menuItemStyleData: MenuItemStyleData(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            customHeights: _getCustomItemsHeights(),
+                          menuItemStyleData: const MenuItemStyleData(
+                            padding: EdgeInsets.symmetric(horizontal: 8.0),
+                            // customHeights: _getCustomItemsHeights(),
                           ),
                         ),
                       ),
