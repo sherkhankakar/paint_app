@@ -1,8 +1,12 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import '../services/firebase_services.dart';
+import 'bottom_bar_screen.dart';
+import 'buyer_homescreen.dart';
 import 'forgot_password.dart';
-import 'seller_home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.userType});
@@ -45,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     // initialize controller
-
+    log(widget.userType);
     super.initState();
   }
 
@@ -315,27 +319,69 @@ class _LoginScreenState extends State<LoginScreen> {
                       _switchingSignInAndSignUp == false
                           ? _authService
                               .createUserWithEmailAndPassword(
-                                _emailController.text.trim(),
-                                _passwordController.text.trim(),
-                                name: _nameController.text.trim(),
-                                mobile: _phnController.text.trim(),
-                                address: 'Pakistan',
-                                userType: widget.userType,
-                              )
-                              .whenComplete(() => _isLoading.value = false)
+                              _emailController.text.trim(),
+                              _passwordController.text.trim(),
+                              name: _nameController.text.trim(),
+                              mobile: _phnController.text.trim(),
+                              address: 'Pakistan',
+                              userType: widget.userType,
+                            )
+                              .whenComplete(() {
+                              _isLoading.value = false;
+                              setState(() {
+                                _switchingSignInAndSignUp = true;
+                              });
+                            })
                           : _authService
                               .signInWithEmailAndPassword(
                               _emailController.text.trim(),
                               _passwordController.text.trim(),
                               widget.userType,
                             )
-                              .whenComplete(() {
-                              _isLoading.value = false;
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (ctx) => const HomeScreen()),
-                                (route) => false,
+                              .then((value) async {
+                              if (value.user != null) {
+                                FirebaseFirestore.instance
+                                    .collection('users')
+                                    .doc(value.user!.uid)
+                                    .get()
+                                    .then(
+                                  (value) {
+                                    log(value.data()!['userType']);
+                                    if (value.exists &&
+                                        value.data()!['userType'] ==
+                                            widget.userType) {
+                                      nextScreen(widget.userType == 'buyer'
+                                          ? const BuyerHomeScreen()
+                                          : const BottomBarScreen());
+                                    } else {
+                                      AuthService.signOut();
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'You can\'t sign-in with ${widget.userType} account in ${widget.userType == 'buyer' ? 'seller dashboard' : 'buyer\'s dashboard'}'),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+
+                                _isLoading.value = false;
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('User not found'),
+                                  ),
+                                );
+                                _isLoading.value = false;
+                              }
+                            }).catchError((error) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(AuthService.msg.value),
+                                ),
                               );
+                              _isLoading.value = false;
                             });
                     },
                     child: Padding(
@@ -423,4 +469,13 @@ class _LoginScreenState extends State<LoginScreen> {
   //     debugPrint('please provide the above details');
   //   }
   // }
+
+  nextScreen(Widget screenName) {
+    return Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => screenName,
+      ),
+      (route) => false,
+    );
+  }
 }

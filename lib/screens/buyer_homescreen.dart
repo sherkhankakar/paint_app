@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/electrician_estimation.dart';
+import 'package:paint_app/screens/get_started_screen.dart';
+import 'package:paint_app/screens/marble_estimation.dart';
 import 'package:paint_app/screens/paint_estimation.dart';
+import 'package:paint_app/screens/plumbing_estimation.dart';
+import 'package:paint_app/services/firebase_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BuyerHomeScreen extends StatefulWidget {
   const BuyerHomeScreen({Key? key}) : super(key: key);
@@ -16,8 +22,14 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(110, 132, 255, 0.54),
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.clear();
+            AuthService.signOut().whenComplete(() => Navigator.of(context)
+                .pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (ctx) => const GetStartedScreen()),
+                    (route) => false));
           },
           icon: const Icon(Icons.logout),
         ),
@@ -61,16 +73,24 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  gridContainers('    Paint\nEstimates', 'assets/images/painter.jpg',page: const PaintEstimation()),
-                  gridContainers('  Marbles\nEstimates', 'assets/images/painter.jpg')
+                  gridContainers(
+                      'Paint\nEstimates', 'assets/images/painter.jpg',
+                      page: const PaintEstimation()),
+                  gridContainers(
+                      'Marbles\nEstimates', 'assets/images/painter.jpg',
+                      page: const MarbleEstimation())
                 ],
               ),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  gridContainers('Electrician\nEstimates', 'assets/images/painter.jpg'),
-                  gridContainers('Plumbing\nEstimates', 'assets/images/plumber.jpg')
+                  gridContainers(
+                      'Electrician\nEstimates', 'assets/images/painter.jpg',
+                      page: const ElectricianEstimation()),
+                  gridContainers(
+                      'Plumbing\nEstimates', 'assets/images/plumber.jpg',
+                      page: const PlumbingEstimation())
                 ],
               ),
             ],
@@ -82,8 +102,8 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
 
   gridContainers(String title, String img, {Widget? page}) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> page!));
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page!));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -96,9 +116,12 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
           children: [
             Text(
               title,
+              textAlign: TextAlign.center,
               style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                  fontFamily: 'Sansita', fontSize: 18, color: Colors.white),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'Sansita',
+                  fontSize: 18,
+                  color: Colors.white),
             ),
             const SizedBox(height: 10),
             ClipRRect(

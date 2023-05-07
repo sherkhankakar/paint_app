@@ -2,6 +2,13 @@ import 'dart:developer';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:paint_app/screens/hire_painter.dart';
+
+class MyDataObject {
+  final int id;
+
+  MyDataObject({required this.id});
+}
 
 class PaintEstimation extends StatefulWidget {
   const PaintEstimation({Key? key}) : super(key: key);
@@ -18,35 +25,38 @@ class _PaintEstimationState extends State<PaintEstimation> {
   final TextEditingController _doorWidthCtr = TextEditingController();
   final TextEditingController _windowsHeightCtr = TextEditingController();
   final TextEditingController _windowsWidthCtr = TextEditingController();
+
+  final List<MyDataObject> _wallList = [];
+  final List<MyDataObject> _doorList = [];
+  final List<MyDataObject> _windowList = [];
+
   final List<String> paintTypes = [
     'Type 1',
-    'Type 1',
-    'Type 1',
-    'Type 1',
+    'Type 2',
+    'Type 3',
+    'Type 4',
   ];
   String? selectedValue;
 
-  List<DropdownMenuItem<String>> _addDividersAfterItems(List<String> items) {
+  List<DropdownMenuItem<String>> _addDividersAfterItems(
+      List<String> paintTypes) {
     List<DropdownMenuItem<String>> menuItems = [];
-    for (var item in items) {
+    for (var type in paintTypes) {
       menuItems.addAll(
         [
           DropdownMenuItem<String>(
-            value: item,
+            value: type,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                item,
+                type,
                 style: const TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Sansita',
-                  fontSize: 14,
-                ),
+                    color: Colors.white, fontSize: 14, fontFamily: 'Sansita'),
               ),
             ),
           ),
           //If it's last item, we will not add Divider after it.
-          if (item != items.last)
+          if (type != paintTypes.last)
             const DropdownMenuItem<String>(
               enabled: false,
               child: Divider(),
@@ -68,9 +78,10 @@ class _PaintEstimationState extends State<PaintEstimation> {
         itemsHeights.add(4);
       }
     }
-    log(itemsHeights.toString());
     return itemsHeights;
   }
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -118,70 +129,117 @@ class _PaintEstimationState extends State<PaintEstimation> {
         )),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 120),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Paint Type',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Sansita',
-                          shadows: <Shadow>[
-                            Shadow(
-                                offset: Offset(0, 2.0),
-                                blurRadius: 5.0,
-                                color: Colors.black54),
-                          ]),
-                    ),
-                    Container(
-                      // height: 35,
-                      width: 200,
-                      decoration: const BoxDecoration(color: Colors.white12),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          isExpanded: true,
-                          hint: const Text(
-                            'Select Paint type',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15,
-                              fontFamily: 'Sansita',
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 120),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Paint Type',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
+                      Container(
+                        // height: 35,
+                        width: 200,
+                        decoration: const BoxDecoration(color: Colors.white12),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            iconStyleData: const IconStyleData(
+                              iconEnabledColor: Colors.white,
+                              icon: Icon(Icons.keyboard_arrow_down_rounded),
+                              openMenuIcon:
+                                  Icon(Icons.keyboard_arrow_up_rounded),
+                            ),
+                            isExpanded: true,
+                            hint: const Text(
+                              'Select Paint type',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontFamily: 'Sansita',
+                              ),
+                            ),
+                            items: _addDividersAfterItems(paintTypes),
+                            value: selectedValue,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedValue = value as String;
+                              });
+                            },
+                            buttonStyleData:
+                                const ButtonStyleData(height: 40, width: 140),
+                            dropdownStyleData: const DropdownStyleData(
+                              decoration: BoxDecoration(color: Colors.black54),
+                              maxHeight: 200,
+                            ),
+                            menuItemStyleData: const MenuItemStyleData(
+                              padding: EdgeInsets.symmetric(horizontal: 8.0),
+                              // customHeights: _getCustomItemsHeights(),
                             ),
                           ),
-                          items: _addDividersAfterItems(paintTypes),
-                          value: selectedValue,
-                          onChanged: (value) {
-                            setState(() {
-                              selectedValue = value as String;
-                            });
-                          },
-                          buttonStyleData:
-                              const ButtonStyleData(height: 40, width: 140),
-                          dropdownStyleData: const DropdownStyleData(
-                            decoration: BoxDecoration(color: Colors.black54),
-                            maxHeight: 200,
-                          ),
-                          menuItemStyleData: const MenuItemStyleData(
-                            padding: EdgeInsets.symmetric(horizontal: 8.0),
-                            // customHeights: _getCustomItemsHeights(),
-                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Coat',
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Coat',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
+                      ),
+                      Container(
+                        height: 35,
+                        width: 200,
+                        decoration: const BoxDecoration(color: Colors.white12),
+                        child: TextField(
+                          controller: _coatNumberCtr,
+                          keyboardType: TextInputType.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Sansita',
+                          ),
+                          decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: 'Times',
+                              hintStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Sansita',
+                              )),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Walls',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -194,125 +252,254 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                 color: Colors.black54),
                           ]),
                     ),
-                    Container(
-                      height: 35,
-                      width: 200,
-                      decoration: const BoxDecoration(color: Colors.white12),
-                      child: TextField(
-                        controller: _coatNumberCtr,
-                        keyboardType: TextInputType.name,
-                        style: const TextStyle(
-                          color: Colors.black,
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 100,
+                    //color: Colors.grey,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _wallList.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == _wallList.length) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 20),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _wallList.add(
+                                          MyDataObject(id: _wallList.length));
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 30),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _wallList.removeLast();
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return containerSize('New Width', 'New Height',
+                              _wallWidthCtr, _wallHeightCtr);
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Doors',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                           fontFamily: 'Sansita',
-                        ),
-                        decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Times',
-                            hintStyle: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Sansita',
-                            )),
+                          shadows: <Shadow>[
+                            Shadow(
+                                offset: Offset(0, 2.0),
+                                blurRadius: 5.0,
+                                color: Colors.black54),
+                          ]),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 100,
+                    //color: Colors.grey,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _doorList.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == _doorList.length) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 20),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _doorList.add(
+                                          MyDataObject(id: _doorList.length));
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 30),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _doorList.removeLast();
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return containerSize('New Width', 'New Height',
+                              _doorWidthCtr, _doorHeightCtr);
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      'Windows',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'Sansita',
+                          shadows: <Shadow>[
+                            Shadow(
+                                offset: Offset(0, 2.0),
+                                blurRadius: 5.0,
+                                color: Colors.black54),
+                          ]),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 100,
+                    //color: Colors.grey,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _windowList.length + 1,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (index == _windowList.length) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(width: 20),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _windowList.add(
+                                          MyDataObject(id: _windowList.length));
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 30),
+                              Container(
+                                height: 40,
+                                width: 40,
+                                decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white12),
+                                child: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _windowList.removeLast();
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.remove,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return containerSize('New Width', 'New Height',
+                              _windowsWidthCtr, _windowsHeightCtr);
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          showAlertDialog();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromRGBO(110, 132, 255, 0.54),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20))),
+                      child: const Text(
+                        'Continue',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontFamily: 'Sansita',
+                            shadows: <Shadow>[
+                              Shadow(
+                                  offset: Offset(0, 2.0),
+                                  blurRadius: 5.0,
+                                  color: Colors.black54),
+                            ]),
                       ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Walls',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Sansita',
-                        shadows: <Shadow>[
-                          Shadow(
-                              offset: Offset(0, 2.0),
-                              blurRadius: 5.0,
-                              color: Colors.black54),
-                        ]),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    containerSize(
-                      'Total Width',
-                      _wallWidthCtr,
                     ),
-                    containerSize(
-                      'Total Height',
-                      _wallHeightCtr,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Doors',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Sansita',
-                        shadows: <Shadow>[
-                          Shadow(
-                              offset: Offset(0, 2.0),
-                              blurRadius: 5.0,
-                              color: Colors.black54),
-                        ]),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    containerSize(
-                      'Total Width',
-                      _doorWidthCtr,
-                    ),
-                    containerSize(
-                      'Total Height',
-                      _doorHeightCtr,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Text(
-                    'Windows',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Sansita',
-                        shadows: <Shadow>[
-                          Shadow(
-                              offset: Offset(0, 2.0),
-                              blurRadius: 5.0,
-                              color: Colors.black54),
-                        ]),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    containerSize(
-                      'Total Width',
-                      _windowsWidthCtr,
-                    ),
-                    containerSize(
-                      'Total Height',
-                      _windowsHeightCtr,
-                    ),
-                  ],
-                ),
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -320,55 +507,304 @@ class _PaintEstimationState extends State<PaintEstimation> {
     );
   }
 
-  containerSize(String width, TextEditingController heightCtr) {
-    return Container(
-      height: 100,
-      width: 100,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20), color: Colors.white12),
-      child: Column(
-        children: [
-          const SizedBox(height: 5),
-          Text(
-            width,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontFamily: 'Sansita',
-                shadows: <Shadow>[
-                  Shadow(
-                      offset: Offset(0, 2.0),
-                      blurRadius: 5.0,
-                      color: Colors.black54),
-                ]),
+  containerSize(String width, String height, TextEditingController heightCtr,
+      TextEditingController widthCtr) {
+    return Row(
+      children: [
+        Container(
+          height: 100,
+          width: 100,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20), color: Colors.white12),
+          child: Column(
+            children: [
+              const SizedBox(height: 5),
+              Text(
+                width,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: 'Sansita',
+                    shadows: <Shadow>[
+                      Shadow(
+                          offset: Offset(0, 2.0),
+                          blurRadius: 5.0,
+                          color: Colors.black54),
+                    ]),
+              ),
+              SizedBox(
+                height: 50,
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Provide this';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10)),
+                  controller: heightCtr,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ),
+              // const SizedBox(height: 20),
+              const Expanded(
+                child: Text(
+                  'Feet',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: 'Sansita',
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(0, 2.0),
+                            blurRadius: 5.0,
+                            color: Colors.black54),
+                      ]),
+                ),
+              ),
+            ],
           ),
-          TextField(
-            decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(horizontal: 10)),
-            controller: heightCtr,
-            keyboardType: TextInputType.number,
-            style: const TextStyle(
-              color: Colors.white,
-              fontFamily: 'Sansita',
-            ),
+        ),
+        const SizedBox(width: 30),
+        Container(
+          height: 100,
+          width: 100,
+          margin: const EdgeInsets.only(right: 30),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20), color: Colors.white12),
+          child: Column(
+            children: [
+              const SizedBox(height: 5),
+              Text(
+                height,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontFamily: 'Sansita',
+                    shadows: <Shadow>[
+                      Shadow(
+                          offset: Offset(0, 2.0),
+                          blurRadius: 5.0,
+                          color: Colors.black54),
+                    ]),
+              ),
+              SizedBox(
+                height: 50,
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Provide this';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 10)),
+                  controller: widthCtr,
+                  keyboardType: TextInputType.number,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontFamily: 'Sansita',
+                  ),
+                ),
+              ),
+              // const SizedBox(height: 20),
+              const Expanded(
+                child: Text(
+                  'Feet',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontFamily: 'Sansita',
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(0, 2.0),
+                            blurRadius: 5.0,
+                            color: Colors.black54),
+                      ]),
+                ),
+              ),
+            ],
           ),
-          // const SizedBox(height: 20),
-          const Text(
-            'Feet',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                fontFamily: 'Sansita',
-                shadows: <Shadow>[
-                  Shadow(
-                      offset: Offset(0, 2.0),
-                      blurRadius: 5.0,
-                      color: Colors.black54),
-                ]),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
+
+  showAlertDialog() {
+    // set up the button
+    double? paintCost;
+    Map<String, dynamic>? data;
+    Widget okButton = Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        SizedBox(
+          width: 120,
+          height: 40,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                backgroundColor: const Color.fromRGBO(186, 186, 186, 1)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text(
+              'Close',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Sansita',
+                  shadows: <Shadow>[
+                    Shadow(
+                        offset: Offset(0, 2.0),
+                        blurRadius: 5.0,
+                        color: Colors.black54),
+                  ]),
+            ),
+            // fontSized: 16,
+          ),
+        ),
+        SizedBox(
+          width: 120,
+          height: 40,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                backgroundColor: const Color.fromRGBO(186, 186, 186, 1)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HirePainter(
+                    paintCost: paintCost!,
+                    serviceType: 'painter',
+                    data: data,
+                  ),
+                ),
+              );
+            },
+            child: const Text(
+              'Hire',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontFamily: 'Sansita',
+                  shadows: <Shadow>[
+                    Shadow(
+                        offset: Offset(0, 2.0),
+                        blurRadius: 5.0,
+                        color: Colors.black54),
+                  ]),
+            ),
+            // fontSized: 16,
+          ),
+        ),
+      ],
+    );
+
+    // set up the AlertDialog
+    // AlertDialog alert = stderr// show the dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        double wallArea = double.parse(_wallHeightCtr.text) *
+            double.parse(_wallWidthCtr.text) *
+            _wallList.length;
+        double doorArea = double.parse(_doorHeightCtr.text) *
+            double.parse(_doorWidthCtr.text) *
+            _doorList.length;
+        double windowArea = double.parse(_windowsHeightCtr.text) *
+            double.parse(_windowsWidthCtr.text) *
+            _windowList.length;
+        totalArea = wallArea - doorArea - windowArea;
+        final totalPaint = totalArea! / 350;
+        log(_coatNumberCtr.text);
+
+        paintCost = totalPaint * 3000 * double.parse(_coatNumberCtr.text);
+        data = {
+          'paint_type': selectedValue,
+          'coat': _coatNumberCtr.text,
+          'wall_area': totalArea.toString(),
+          'door_area': doorArea.toString(),
+          'window_area': windowArea.toString(),
+          'paint_cost': paintCost,
+        };
+        return StatefulBuilder(
+            builder: ((context, setState) => AlertDialog(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  backgroundColor: const Color.fromRGBO(99, 98, 98, 1),
+                  content: SizedBox(
+                    height: 230,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        rowTiles('Paint Type', selectedValue!),
+                        const SizedBox(height: 10),
+                        rowTiles('Coat', _coatNumberCtr.text),
+                        const SizedBox(height: 10),
+                        rowTiles('Total Area', '$totalArea sqft'),
+                        const SizedBox(height: 10),
+                        rowTiles('Total Paint',
+                            '${totalPaint.toStringAsFixed(2)} gillion'),
+                        const SizedBox(height: 10),
+                        rowTiles('Per Gillion Price', '3000 PKR'),
+                        const SizedBox(height: 10),
+                        rowTiles('Total Price of Paint',
+                            '${paintCost!.toStringAsFixed(2)}PKR'),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                  actions: [Center(child: okButton)],
+                )));
+      },
+    );
+  }
+
+  rowTiles(String title, String result) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontFamily: 'Sansita',
+              shadows: <Shadow>[
+                Shadow(
+                    offset: Offset(0, 2.0),
+                    blurRadius: 5.0,
+                    color: Colors.black54),
+              ]),
+        ),
+        Text(
+          result,
+          style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontFamily: 'Sansita',
+              shadows: <Shadow>[
+                Shadow(
+                    offset: Offset(0, 2.0),
+                    blurRadius: 5.0,
+                    color: Colors.black54),
+              ]),
+        ),
+      ],
+    );
+  }
+
+  double? totalArea;
 }

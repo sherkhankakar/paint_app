@@ -1,7 +1,14 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:paint_app/screens/get_started_screen.dart';
 
-import 'paint_estimation.dart';
+import '../components/estimated_costs.dart';
+import '../services/firebase_services.dart';
+import 'add_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -29,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool conditionMet = false;
   void toggleEstimatedCosts() {
     setState(() {
       showCalculatedEstimate = !showCalculatedEstimate;
@@ -38,30 +46,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(110, 132, 255, 0.54),
         automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => const PaintEstimation(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.navigate_next),
-          ),
-        ],
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40))),
         centerTitle: true,
         toolbarHeight: 60,
+        actions: [
+          IconButton(
+            onPressed: () async {
+              await AuthService.signOut().whenComplete(
+                () => Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => const GetStartedScreen()),
+                  (route) => false,
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.logout,
+              color: Colors.white,
+            ),
+          ),
+        ],
         title: const Text(
           'Home Page',
           style: TextStyle(
@@ -77,34 +95,75 @@ class _HomeScreenState extends State<HomeScreen> {
               ]),
         ),
       ),
-      body: Container(
-        height: double.maxFinite,
-        decoration: const BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color.fromRGBO(23, 213, 255, 1),
-            Color.fromRGBO(224, 26, 255, 0.9),
-          ],
-        )),
-        child: ListView.builder(
-          itemCount: 5, // Number of items in the list
-          itemBuilder: (BuildContext context, int index) {
-            // Return a widget for each item in the list
-            return Column(
-              children: [
-                const SizedBox(height: 15),
-                containerTile(index),
-              ],
-            );
-          },
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => const AddServiceScreen(),
+          ),
         ),
+        child: const Icon(Icons.add),
       ),
+      body: Container(
+          height: double.maxFinite,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromRGBO(23, 213, 255, 1),
+              Color.fromRGBO(224, 26, 255, 0.9),
+            ],
+          )),
+          child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
+            future: AuthService.fetchRequests(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              } else if (snapshot.hasData) {
+                for (int i = 0; i < snapshot.data!.length; i++) {
+                  if (snapshot.data![i].get('seller_id') ==
+                      FirebaseAuth.instance.currentUser!.uid) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (snapshot.data![i].get('seller_id') ==
+                            FirebaseAuth.instance.currentUser!.uid) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 15),
+                              containerTile(index, snapshot.data![index]),
+                            ],
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
+                    );
+                  }
+                }
+                // Condition not met for any item in snapshot.data
+                if (!conditionMet) {
+                  return const Center(
+                    child: Text(
+                      'You have 0 requests',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+                return const SizedBox();
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                );
+              }
+            },
+          )),
     );
   }
 
-  containerTile(int index) {
+  containerTile(int index, DocumentSnapshot service) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       margin: const EdgeInsets.symmetric(horizontal: 15),
@@ -116,44 +175,49 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: () {
           setState(() {
             currentIndex = index;
-            userDetails = true;
+            userDetails = !userDetails;
           });
         },
         child: currentIndex == index
             ? !userDetails
-                ? Row(
-                    children: [
-                      const CircleAvatar(
-                        radius: 50,
-                        backgroundColor: Color.fromRGBO(133, 131, 131, 1),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          SizedBox(height: 10),
-                          Text(
-                            'Name',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Sansita'),
+                ? SizedBox(
+                    width: double.maxFinite,
+                    height: 100,
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Color.fromRGBO(133, 131, 131, 1),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                service.get('email') ?? 'name',
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: 'Sansita'),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Estimated Budget ${service.get('paint_cost').toStringAsFixed(2)}',
+                                  softWrap: true,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontFamily: 'Sansita'),
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Amet minim mollit non deserunt\n'
-                            'ullamco est sit aliqua dolor do amet\n'
-                            'sint. Velit officia consequat duis enim\n'
-                            'velit mollit. Exercitation veniam\n'
-                            'consequat sunt nostrud amet.',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontFamily: 'Sansita'),
-                          ),
-                        ],
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   )
                 : Column(
                     children: [
@@ -168,87 +232,202 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.black,
                         ),
                       ),
-                      rowTiles('Name', 'ABC'),
-                      rowTiles('Location', 'ABC'),
-                      clickableTiles('Estimates', 'View', index),
-                      clickableTiles('Total Estimates', 'Calculate', index),
+                      if (showCalculatedEstimate == true)
+                        EstimatedCost(
+                          service: service,
+                        ),
+                      // if (showCalculatedEstimate == false)
+                      //   rowTiles('Name', service.get('name')),
+                      // if (showCalculatedEstimate == false)
+                      //   rowTiles('Location', service.get('location')),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles('Paint', service.get('paintQty') + ' gallon'),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles('Painter\'s tape', service.get('tapeQty')),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles('Wall Cleaner', service.get('wallCleanerQty')),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles('Brushes', service.get('brushQty')),
+                      if (userDetails == true)
+                        rowTiles(
+                            'Wall Area', service.get('wall_area') + ' sqft'),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles('Door Area', service.get('doorQty') + ' sqft'),
+                      // if (isEstimatesShowing == true)
+                      //   rowTiles(
+                      //       'Window Area', service.get('windowQty') + ' sqft'),
+                      if (userDetails == true)
+                        rowTiles(
+                            'Door Area', service.get('door_area') + ' sqft'),
+                      if (userDetails == true)
+                        rowTiles('Window Area',
+                            service.get('window_area') + ' sqft'),
+                      if (userDetails == true)
+                        rowTiles('Coat', service.get('coat') + ' x'),
+                      if (userDetails == true)
+                        rowTiles('Paint Type', service.get('paint_type')),
+                      if (userDetails == true)
+                        rowTiles(
+                            'Paint Estimate',
+                            service.get('paint_cost').toStringAsFixed(2) +
+                                ' PKR'),
+                      const SizedBox(height: 5),
+                      if (isEstimatesShowing == false &&
+                          showCalculatedEstimate == false)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: const [
+                            FaIcon(FontAwesomeIcons.whatsapp),
+                            FaIcon(
+                              FontAwesomeIcons.phone,
+                              size: 20,
+                            ),
+                          ],
+                        ),
                       const SizedBox(height: 5),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          FaIcon(FontAwesomeIcons.whatsapp),
-                          FaIcon(
-                            FontAwesomeIcons.phone,
-                            size: 20,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              log('message: $backCount');
+                              setState(() {
+                                if (backCount == 1) {
+                                  isEstimatesShowing = false;
+                                  showCalculatedEstimate = false;
+                                  backCount = 0;
+                                } else {
+                                  userDetails = false;
+                                }
+                              });
+
+                              //     .whenComplete(() {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                        title: const Text('Buyer Contact Info'),
+                                        content: const Text(
+                                          'Contact buyer through WhatsApp',
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        actions: [
+                                          IconButton(
+                                            onPressed: () {
+                                              // AuthService()
+                                              //     .deleteRequest(service.id)
+                                            },
+                                            icon: const FaIcon(
+                                                FontAwesomeIcons.whatsapp),
+                                          ),
+                                        ]);
+                                  });
+                              // });
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 110,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color.fromRGBO(26, 41, 128, 1),
+                                      Color.fromRGBO(38, 208, 206, 1),
+                                    ],
+                                  )),
+                              child: const Center(
+                                child: Text(
+                                  'Accept',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'Sansita'),
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              AuthService()
+                                  .deleteRequest(service.id)
+                                  .whenComplete(() {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content:
+                                        Text('Request deleted successfully'),
+                                  ),
+                                );
+                              });
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 110,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color.fromRGBO(26, 41, 128, 1),
+                                      Color.fromRGBO(38, 208, 206, 1),
+                                    ],
+                                  )),
+                              child: const Center(
+                                child: Text(
+                                  'Reject',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontFamily: 'Sansita'),
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 5),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            userDetails = false;
-                          });
-                        },
-                        child: Container(
-                          height: 30,
-                          width: 110,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color.fromRGBO(26, 41, 128, 1),
-                                  Color.fromRGBO(38, 208, 206, 1),
-                                ],
-                              )),
-                          child: const Center(
+                    ],
+                  )
+            : SizedBox(
+                width: double.maxFinite,
+                height: 100,
+                child: Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Color.fromRGBO(133, 131, 131, 1),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            service.get('email'),
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Sansita'),
+                          ),
+                          Expanded(
                             child: Text(
-                              'Back',
-                              style: TextStyle(
+                              'Estimated Budget${service.get('paint_cost').toStringAsFixed(2)}',
+                              softWrap: true,
+                              style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 15,
+                                  fontSize: 12,
                                   fontFamily: 'Sansita'),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  )
-            : Row(
-                children: [
-                  const CircleAvatar(
-                    radius: 50,
-                    backgroundColor: Color.fromRGBO(133, 131, 131, 1),
-                  ),
-                  const SizedBox(width: 10),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      SizedBox(height: 10),
-                      Text(
-                        'Name',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Sansita'),
+                        ],
                       ),
-                      Text(
-                        'Amet minim mollit non deserunt\n'
-                        'ullamco est sit aliqua dolor do amet\n'
-                        'sint. Velit officia consequat duis enim\n'
-                        'velit mollit. Exercitation veniam\n'
-                        'consequat sunt nostrud amet.',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 12,
-                            fontFamily: 'Sansita'),
-                      ),
-                    ],
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
       )),
     );
@@ -271,7 +450,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: () {
-              _toggleDetails(false);
+              if (title == 'Estimates') {
+                _toggleDetails(false);
+              } else {
+                toggleEstimatedCosts();
+              }
               // setState(() {
               //   isEstimatesShowing = !isEstimatesShowing;
               //   // viewIndex = index;
@@ -284,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(
                   decoration: TextDecoration.underline,
                   color: Colors.white,
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w600,
                   fontFamily: 'Sansita'),
             ),
@@ -292,12 +475,11 @@ class _HomeScreenState extends State<HomeScreen> {
           if (isEstimatesShowing)
             Column(
               children: const [
-                CircleAvatar(),
                 Text(
-                  'Name',
+                  'test',
                   style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                       fontFamily: 'Sansita'),
                 ),
@@ -308,7 +490,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  rowTiles(String name, String result, {String? cost}) {
+  rowTiles(
+    String name,
+    String result,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
@@ -320,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
             name,
             style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Sansita'),
           ),
@@ -329,15 +514,7 @@ class _HomeScreenState extends State<HomeScreen> {
             textAlign: TextAlign.center,
             style: const TextStyle(
                 color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Sansita'),
-          ),
-          Text(
-            cost ?? '',
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'Sansita'),
           ),
