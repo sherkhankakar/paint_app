@@ -103,63 +103,68 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: const Icon(Icons.add),
       ),
-      body: Container(
-          height: double.maxFinite,
-          decoration: const BoxDecoration(
-              gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color.fromRGBO(23, 213, 255, 1),
-              Color.fromRGBO(224, 26, 255, 0.9),
-            ],
-          )),
-          child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
-            future: AuthService.fetchRequests(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text(snapshot.error.toString()));
-              } else if (snapshot.hasData) {
-                for (int i = 0; i < snapshot.data!.length; i++) {
-                  if (snapshot.data![i].get('seller_id') ==
-                      FirebaseAuth.instance.currentUser!.uid) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        if (snapshot.data![index].get('seller_id') ==
-                            FirebaseAuth.instance.currentUser!.uid) {
-                          return Column(
-                            children: [
-                              const SizedBox(height: 15),
-                              containerTile(index, snapshot.data![index]),
-                            ],
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: Container(
+            height: double.maxFinite,
+            decoration: const BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.fromRGBO(23, 213, 255, 1),
+                Color.fromRGBO(224, 26, 255, 0.9),
+              ],
+            )),
+            child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
+              future: AuthService.fetchRequests(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
+                } else if (snapshot.hasData) {
+                  for (int i = 0; i < snapshot.data!.length; i++) {
+                    if (snapshot.data![i].get('seller_id') ==
+                        FirebaseAuth.instance.currentUser!.uid) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          if (snapshot.data![index].get('seller_id') ==
+                              FirebaseAuth.instance.currentUser!.uid) {
+                            return Column(
+                              children: [
+                                const SizedBox(height: 15),
+                                containerTile(index, snapshot.data![index]),
+                              ],
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        },
+                      );
+                    }
+                  }
+                  // Condition not met for any item in snapshot.data
+                  if (!conditionMet) {
+                    return const Center(
+                      child: Text(
+                        'You have 0 requests',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     );
                   }
-                }
-                // Condition not met for any item in snapshot.data
-                if (!conditionMet) {
+                  return const SizedBox();
+                } else {
                   return const Center(
-                    child: Text(
-                      'You have 0 requests',
-                      style: TextStyle(color: Colors.white),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
                     ),
                   );
                 }
-                return const SizedBox();
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                );
-              }
-            },
-          )),
+              },
+            )),
+      ),
     );
   }
 
