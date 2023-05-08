@@ -66,7 +66,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
-                                      userType: 'Painter',
+                                      userType: 'painter',
                                     )));
                       },
                       child: Container(
@@ -194,7 +194,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
-                                      userType: 'Plumber',
+                                      userType: 'plumber',
                                     )));
                       },
                       child: Container(

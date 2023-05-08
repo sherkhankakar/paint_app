@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (BuildContext context, int index) {
-                        if (snapshot.data![i].get('seller_id') ==
+                        if (snapshot.data![index].get('seller_id') ==
                             FirebaseAuth.instance.currentUser!.uid) {
                           return Column(
                             children: [
