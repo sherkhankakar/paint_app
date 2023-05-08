@@ -25,6 +25,12 @@ class _HirePainterState extends State<HirePainter> {
   bool conditionMet = false;
 
   @override
+  void initState() {
+    print('data is here  =  ${widget.paintCost}');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -74,41 +80,41 @@ class _HirePainterState extends State<HirePainter> {
               if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error.toString()));
               } else if (snapshot.hasData) {
-                // for (int i = 0; i < snapshot.data!.length; i++) {
+                 for (int i = 0; i < snapshot.data!.length; i++) {
                 // final pCost = snapshot.data![i].get('paintCost');
                 //double.parse(pCost) <= widget.paintCost &&
-                // if (snapshot.data![i].get('service_type') ==
-                //     widget.serviceType) {
-                //   log('index : $i');
+                if (snapshot.data![i].get('service_type') ==
+                    widget.serviceType) {
+                //  log('index : $i');
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
                   itemBuilder: (BuildContext context, int index) {
                     // final pCost = snapshot.data![index].get('paintCost');
-                    // if (snapshot.data![index].get('service_type') ==
-                    //     widget.serviceType) {
+                    if (snapshot.data![index].get('service_type') ==
+                        widget.serviceType) {
                     return Column(
                       children: [
                         const SizedBox(height: 15),
                         containerTiles(index, snapshot.data![index]),
                       ],
                     );
-                    // } else {
-                    //   return const SizedBox();
-                    // }
+                     } else {
+                       return const SizedBox();
+                     }
                   },
                 );
-                // }
-                // }
+                }
+                }
                 // Condition not met for any item in snapshot.data
-                // if (!conditionMet) {
-                //   return Center(
-                //     child: Text(
-                //       '${widget.serviceType.toUpperCase()} is not found with your estimate',
-                //       style: const TextStyle(color: Colors.white),
-                //     ),
-                //   );
-                // }
-                // return const SizedBox();
+                if (!conditionMet) {
+                  return Center(
+                    child: Text(
+                      '${widget.serviceType.toUpperCase()} is not found with your estimate',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+                return const SizedBox();
               } else {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -248,15 +254,15 @@ class _HirePainterState extends State<HirePainter> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 12),
+                                //const SizedBox(width: 12),
                                 Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const Text(
                                       'Estimation',
                                       style: TextStyle(
                                           color: Colors.white,
-                                          fontSize: 16,
+                                          fontSize: 13,
                                           fontFamily: 'Sansita'),
                                     ),
                                     Text(
@@ -272,7 +278,8 @@ class _HirePainterState extends State<HirePainter> {
                                       builder: (BuildContext context,
                                           dynamic value, Widget? child) {
                                         return SizedBox(
-                                          height: 25,
+                                          height: 23,
+                                          width: 65,
                                           child: ElevatedButton(
                                             style: ElevatedButton.styleFrom(
                                                 shape: RoundedRectangleBorder(

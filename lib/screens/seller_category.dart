@@ -36,10 +36,22 @@ class _SellerCategoryState extends State<SellerCategory> {
                     height: 45,
                     width: 160,
                   ),
-                  Image.asset(
-                    "assets/images/est.png",
-                    height: 25,
-                    width: 120,
+                  Transform.translate(
+                    offset: const Offset(2, -2),
+                    child: const Text(
+                      'Estimation',
+                      style: TextStyle(
+                          shadows: <Shadow>[
+                            Shadow(
+                                offset: Offset(0, 2.0),
+                                blurRadius: 5.0,
+                                color: Colors.black54),
+                          ],
+                          color: Color.fromRGBO(204, 204, 204, 1),
+                          fontSize: 23,
+                          fontFamily: 'Sansita',
+                          fontWeight: FontWeight.w600),
+                    ),
                   ),
                 ],
               ),
@@ -58,7 +70,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                                     )));
                       },
                       child: Container(
-                        height: 140,
+                        height: 120,
                         //width: 250,
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
@@ -118,11 +130,75 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
+                                  userType: 'Tile Installer',
+                                )));
+                      },
+                      child: Container(
+                        height: 120,
+                        //width: 250,
+                        margin: const EdgeInsets.symmetric(horizontal: 30),
+                        decoration: BoxDecoration(
+                          image: const DecorationImage(
+                              image: AssetImage('assets/images/tile.jpg'),
+                              fit: BoxFit.cover),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        // child: Center(
+                        //   child: ClipRRect(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     child: Image.asset(
+                        //       'assets/images/painter.jpg',height: 200,
+                        //
+                        //     ),
+                        //   ),
+                        // ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      height: 35,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(143, 0, 255, 1),
+                              Color.fromRGBO(13, 179, 182, 1)
+                            ],
+                          )),
+                      child: const Center(
+                        child: Text(
+                          'Tile Installer',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Sansita'),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+              Stack(
+                children: [
+                  Transform.translate(
+                    offset: const Offset(0, 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen(
                                       userType: 'Plumber',
                                     )));
                       },
                       child: Container(
-                        height: 140,
+                        height: 120,
                         //width: 250,
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
@@ -182,16 +258,16 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
-                                      userType: 'Tile Installer',
-                                    )));
+                                  userType: 'Electrician',
+                                )));
                       },
                       child: Container(
-                        height: 140,
+                        height: 120,
                         //width: 250,
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           image: const DecorationImage(
-                              image: AssetImage('assets/images/tile.jpg'),
+                              image: AssetImage('assets/images/electrician.jpg'),
                               fit: BoxFit.cover),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -223,7 +299,7 @@ class _SellerCategoryState extends State<SellerCategory> {
                           )),
                       child: const Center(
                         child: Text(
-                          'Tile Installer',
+                          'Electrician',
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,

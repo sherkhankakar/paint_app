@@ -42,10 +42,22 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   height: 45,
                   width: 160,
                 ),
-                Image.asset(
-                  "assets/images/est.png",
-                  height: 25,
-                  width: 120,
+                Transform.translate(
+                  offset: const Offset(2, -2),
+                  child: const Text(
+                    'Estimation',
+                    style: TextStyle(
+                        shadows: <Shadow>[
+                          Shadow(
+                              offset: Offset(0, 2.0),
+                              blurRadius: 5.0,
+                              color: Colors.black54),
+                        ],
+                        color: Color.fromRGBO(204, 204, 204, 1),
+                        fontSize: 23,
+                        fontFamily: 'Sansita',
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),
@@ -53,9 +65,9 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                'Welcome:\nThis app for painter an the user who'
-                ' hire painter to complete their home painting task'
-                ' its easy to use for everyone for seller and for buyer',
+                'Welcome:\nThis app is for estimation. A user who'
+                ' hire a person to complete their home painting, plumbing, marble installing and electricians task.'
+                ' Its easy to use for sellers as well as for buyers',
                 style: TextStyle(
                     color: Colors.white, fontSize: 18, fontFamily: 'Sansita'),
               ),
@@ -100,6 +112,12 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                 child: const Text(
                   'Get Started',
                   style: TextStyle(
+                      shadows: <Shadow>[
+                        Shadow(
+                            offset: Offset(0, 2.0),
+                            blurRadius: 5.0,
+                            color: Colors.black54),
+                      ],
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w600,

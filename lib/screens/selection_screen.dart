@@ -38,10 +38,16 @@ class _SelectionScreenState extends State<SelectionScreen> {
                     height: 45,
                     width: 160,
                   ),
-                  Image.asset(
-                    "assets/images/est.png",
-                    height: 25,
-                    width: 120,
+                  Transform.translate(
+                    offset: const Offset(2,-2),
+                    child: const Text('Estimation',style: TextStyle(
+                        shadows: <Shadow>[
+                          Shadow(
+                              offset: Offset(0, 2.0),
+                              blurRadius: 5.0,
+                              color: Colors.black54),
+                        ],
+                        color: Color.fromRGBO(204, 204, 204, 1), fontSize: 23, fontFamily: 'Sansita',fontWeight: FontWeight.w600),),
                   ),
                 ],
               ),
@@ -88,6 +94,12 @@ class _SelectionScreenState extends State<SelectionScreen> {
                         child: Text(
                           'Seller',
                           style: TextStyle(
+                              shadows: <Shadow>[
+                                Shadow(
+                                    offset: Offset(0, 2.0),
+                                    blurRadius: 5.0,
+                                    color: Colors.black54),
+                              ],
                               color: Colors.white,
                               fontSize: 35,
                               fontWeight: FontWeight.w600,
@@ -148,7 +160,15 @@ class _SelectionScreenState extends State<SelectionScreen> {
                               color: Colors.white,
                               fontSize: 35,
                               fontWeight: FontWeight.w600,
-                              fontFamily: 'Sansita'),
+                              fontFamily: 'Sansita',
+                              shadows: <Shadow>[
+                                Shadow(
+                                    offset: Offset(0, 2.0),
+                                    blurRadius: 5.0,
+                                    color: Colors.black54),
+                              ]
+
+                          ),
                         ),
                       ),
                     ),

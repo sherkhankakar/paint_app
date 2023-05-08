@@ -910,6 +910,7 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
         final totalTiles = totalArea! / tileSize;
 
         paintCost = totalTiles * 70;
+        print('data paint cost = $paintCost');
         data = {
           'paint_type': totalTiles,
           'coat': tileSize.toString(),
