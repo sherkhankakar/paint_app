@@ -19,12 +19,12 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
   final TextEditingController _tileLengthCtr = TextEditingController();
   final TextEditingController _tileWidthCtr = TextEditingController();
   final TextEditingController _tileGapCtr = TextEditingController();
-  final TextEditingController _wallWidthCtr = TextEditingController();
-  final TextEditingController _wallHeightCtr = TextEditingController();
-  final TextEditingController _doorHeightCtr = TextEditingController();
-  final TextEditingController _doorWidthCtr = TextEditingController();
-  final TextEditingController _windowsHeightCtr = TextEditingController();
-  final TextEditingController _windowsWidthCtr = TextEditingController();
+  final List<TextEditingController> _wallWidthCtr = [];
+  final List<TextEditingController> _wallHeightCtr = [];
+  final List<TextEditingController> _doorHeightCtr = [];
+  final List<TextEditingController> _doorWidthCtr = [];
+  final List<TextEditingController> _windowsHeightCtr = [];
+  final List<TextEditingController> _windowsWidthCtr = [];
 
   final List<MyDataObject> _wallList = [];
   final List<MyDataObject> _doorList = [];
@@ -440,9 +440,13 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                                   color: Colors.white12),
                               child: IconButton(
                                 onPressed: () {
+                                  final ctr = TextEditingController();
+                                  final ctr2 = TextEditingController();
                                   setState(() {
                                     _wallList.add(
                                         MyDataObject(id: _wallList.length));
+                                    _wallHeightCtr.add(ctr);
+                                    _wallWidthCtr.add(ctr2);
                                   });
                                 },
                                 icon: const Icon(
@@ -461,7 +465,8 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                               child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _wallList.removeLast();
+                                    _wallList.removeAt(index - 1);
+                                    _wallHeightCtr.removeAt(index - 1);
                                   });
                                 },
                                 icon: const Icon(
@@ -474,7 +479,7 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                         );
                       } else {
                         return containerSize('New Width', 'New Height',
-                            _wallWidthCtr, _wallHeightCtr);
+                            _wallWidthCtr[index], _wallHeightCtr[index]);
                       }
                     },
                   ),
@@ -518,9 +523,13 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                                   color: Colors.white12),
                               child: IconButton(
                                 onPressed: () {
+                                  final ctr = TextEditingController();
+                                  final ctr2 = TextEditingController();
                                   setState(() {
                                     _doorList.add(
                                         MyDataObject(id: _doorList.length));
+                                    _doorHeightCtr.add(ctr);
+                                    _doorWidthCtr.add(ctr2);
                                   });
                                 },
                                 icon: const Icon(
@@ -539,7 +548,9 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                               child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _doorList.removeLast();
+                                    _doorList.removeAt(index - 1);
+                                    _doorHeightCtr.removeAt(index - 1);
+                                    _doorWidthCtr.removeAt(index - 1);
                                   });
                                 },
                                 icon: const Icon(
@@ -552,7 +563,7 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                         );
                       } else {
                         return containerSize('New Width', 'New Height',
-                            _doorWidthCtr, _doorHeightCtr);
+                            _doorWidthCtr[index], _doorHeightCtr[index]);
                       }
                     },
                   ),
@@ -596,9 +607,13 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                                   color: Colors.white12),
                               child: IconButton(
                                 onPressed: () {
+                                  final ctr = TextEditingController();
+                                  final ctr2 = TextEditingController();
                                   setState(() {
                                     _windowList.add(
                                         MyDataObject(id: _windowList.length));
+                                    _windowsHeightCtr.add(ctr);
+                                    _windowsWidthCtr.add(ctr2);
                                   });
                                 },
                                 icon: const Icon(
@@ -617,7 +632,7 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                               child: IconButton(
                                 onPressed: () {
                                   setState(() {
-                                    _windowList.removeLast();
+                                    _windowList.removeAt(index - 1);
                                   });
                                 },
                                 icon: const Icon(
@@ -630,7 +645,7 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                         );
                       } else {
                         return containerSize('New Width', 'New Height',
-                            _windowsWidthCtr, _windowsHeightCtr);
+                            _windowsWidthCtr[index], _windowsHeightCtr[index]);
                       }
                     },
                   ),
@@ -641,7 +656,18 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                     width: MediaQuery.of(context).size.width / 2,
                     child: ElevatedButton(
                       onPressed: () {
-                        showAlertDialog();
+                        if (_wallList.isNotEmpty &&
+                            _doorList.isNotEmpty &&
+                            _windowList.isNotEmpty) {
+                          showAlertDialog();
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                  'Please provide walls, doors, and windows details'),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
@@ -781,6 +807,9 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
   }
 
   showAlertDialog() {
+    double? paintCost;
+    Map<String, dynamic>? data;
+    double? totalArea;
     // set up the button
     Widget okButton = Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -824,9 +853,11 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const HirePainter(
-                            paintCost: 2.0,
+                      builder: (context) => HirePainter(
+                            paintCost: paintCost!,
                             serviceType: 'tile installer',
+                            data: data,
+                            title: 'Tile Intaller',
                           )));
             },
             child: const Text(
@@ -854,6 +885,39 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        double? wallArea;
+        for (int i = 0; i < _wallHeightCtr.length; i++) {
+          wallArea = double.parse(_wallHeightCtr[i].text) *
+              double.parse(_wallWidthCtr[i].text) *
+              _wallList.length;
+        }
+
+        double? doorArea;
+        for (int i = 0; i < _doorHeightCtr.length; i++) {
+          doorArea = double.parse(_doorHeightCtr[i].text) *
+              double.parse(_doorWidthCtr[i].text) *
+              _doorList.length;
+        }
+        double? windowArea;
+        for (int i = 0; i < _windowsWidthCtr.length; i++) {
+          windowArea = double.parse(_windowsHeightCtr[i].text) *
+              double.parse(_windowsWidthCtr[i].text) *
+              _windowList.length;
+        }
+        totalArea = wallArea! - doorArea! - windowArea!;
+        final double tileSize = double.parse(_tileLengthCtr.text) *
+            double.parse(_tileWidthCtr.text);
+        final totalTiles = totalArea! / tileSize;
+
+        paintCost = totalTiles * 70;
+        data = {
+          'paint_type': totalTiles,
+          'coat': tileSize.toString(),
+          'wall_area': totalArea.toString(),
+          'door_area': doorArea.toString(),
+          'window_area': windowArea.toString(),
+          'paint_cost': paintCost,
+        };
         return StatefulBuilder(
             builder: ((context, setState) => AlertDialog(
                   shape: RoundedRectangleBorder(
@@ -865,15 +929,19 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        rowTiles('Tile Size', '12 cm'),
+                        rowTiles('Tile Size', '$tileSize sq/cm'),
                         const SizedBox(height: 10),
-                        rowTiles('Tile Gap', '0.25 cm'),
+                        rowTiles('Tile Gap', '${_tileGapCtr.text} cm'),
                         const SizedBox(height: 10),
-                        rowTiles('Total Area', '250 sq/ft'),
+                        rowTiles('Total Area', '$totalArea sq/ft'),
                         const SizedBox(height: 10),
-                        rowTiles('Total Tiles', '50 tiles'),
+                        rowTiles('Total Tiles',
+                            '${totalTiles.toStringAsFixed(2)} tiles'),
                         const SizedBox(height: 10),
-                        rowTiles('Per Gillion Price', '100 rs'),
+                        rowTiles('Per Tile Price', '70 PKR'),
+                        const SizedBox(height: 10),
+                        rowTiles('Estimated Price',
+                            '${paintCost!.toStringAsFixed(2)} PKR'),
                         const SizedBox(height: 10),
                       ],
                     ),

@@ -19,12 +19,12 @@ class PaintEstimation extends StatefulWidget {
 
 class _PaintEstimationState extends State<PaintEstimation> {
   final TextEditingController _coatNumberCtr = TextEditingController();
-  final TextEditingController _wallWidthCtr = TextEditingController();
-  final TextEditingController _wallHeightCtr = TextEditingController();
-  final TextEditingController _doorHeightCtr = TextEditingController();
-  final TextEditingController _doorWidthCtr = TextEditingController();
-  final TextEditingController _windowsHeightCtr = TextEditingController();
-  final TextEditingController _windowsWidthCtr = TextEditingController();
+  final List<TextEditingController> _wallWidthCtr = [];
+  final List<TextEditingController> _wallHeightCtr = [];
+  final List<TextEditingController> _doorHeightCtr = [];
+  final List<TextEditingController> _doorWidthCtr = [];
+  final List<TextEditingController> _windowsHeightCtr = [];
+  final List<TextEditingController> _windowsWidthCtr = [];
 
   final List<MyDataObject> _wallList = [];
   final List<MyDataObject> _doorList = [];
@@ -82,6 +82,29 @@ class _PaintEstimationState extends State<PaintEstimation> {
   }
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    for (var controller in _doorHeightCtr) {
+      controller.dispose();
+    }
+    for (var controller in _doorWidthCtr) {
+      controller.dispose();
+    }
+    for (var controller in _wallHeightCtr) {
+      controller.dispose();
+    }
+    for (var controller in _wallWidthCtr) {
+      controller.dispose();
+    }
+    for (var controller in _windowsHeightCtr) {
+      controller.dispose();
+    }
+    for (var controller in _windowsWidthCtr) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,9 +297,13 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                     color: Colors.white12),
                                 child: IconButton(
                                   onPressed: () {
+                                    final ctr = TextEditingController();
+                                    final ctr2 = TextEditingController();
                                     setState(() {
                                       _wallList.add(
                                           MyDataObject(id: _wallList.length));
+                                      _wallHeightCtr.add(ctr);
+                                      _wallWidthCtr.add(ctr2);
                                     });
                                   },
                                   icon: const Icon(
@@ -296,6 +323,8 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                   onPressed: () {
                                     setState(() {
                                       _wallList.removeLast();
+                                      _wallHeightCtr.removeLast();
+                                      _wallWidthCtr.removeLast();
                                     });
                                   },
                                   icon: const Icon(
@@ -308,7 +337,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
                           );
                         } else {
                           return containerSize('New Width', 'New Height',
-                              _wallWidthCtr, _wallHeightCtr);
+                              _wallWidthCtr[index], _wallHeightCtr[index]);
                         }
                       },
                     ),
@@ -352,9 +381,13 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                     color: Colors.white12),
                                 child: IconButton(
                                   onPressed: () {
+                                    final ctr = TextEditingController();
+                                    final ctr2 = TextEditingController();
                                     setState(() {
                                       _doorList.add(
                                           MyDataObject(id: _doorList.length));
+                                      _doorHeightCtr.add(ctr);
+                                      _doorWidthCtr.add(ctr2);
                                     });
                                   },
                                   icon: const Icon(
@@ -374,6 +407,8 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                   onPressed: () {
                                     setState(() {
                                       _doorList.removeLast();
+                                      _doorHeightCtr.removeLast();
+                                      _doorWidthCtr.removeLast();
                                     });
                                   },
                                   icon: const Icon(
@@ -386,7 +421,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
                           );
                         } else {
                           return containerSize('New Width', 'New Height',
-                              _doorWidthCtr, _doorHeightCtr);
+                              _doorWidthCtr[index], _doorHeightCtr[index]);
                         }
                       },
                     ),
@@ -430,9 +465,13 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                     color: Colors.white12),
                                 child: IconButton(
                                   onPressed: () {
+                                    final ctr = TextEditingController();
+                                    final ctr2 = TextEditingController();
                                     setState(() {
                                       _windowList.add(
                                           MyDataObject(id: _windowList.length));
+                                      _windowsHeightCtr.add(ctr);
+                                      _windowsWidthCtr.add(ctr2);
                                     });
                                   },
                                   icon: const Icon(
@@ -452,6 +491,8 @@ class _PaintEstimationState extends State<PaintEstimation> {
                                   onPressed: () {
                                     setState(() {
                                       _windowList.removeLast();
+                                      _windowsHeightCtr.removeLast();
+                                      _windowsWidthCtr.removeLast();
                                     });
                                   },
                                   icon: const Icon(
@@ -463,8 +504,11 @@ class _PaintEstimationState extends State<PaintEstimation> {
                             ],
                           );
                         } else {
-                          return containerSize('New Width', 'New Height',
-                              _windowsWidthCtr, _windowsHeightCtr);
+                          return containerSize(
+                              'New Width',
+                              'New Height',
+                              _windowsWidthCtr[index],
+                              _windowsHeightCtr[index]);
                         }
                       },
                     ),
@@ -475,7 +519,19 @@ class _PaintEstimationState extends State<PaintEstimation> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          showAlertDialog();
+                          if (_wallList.isNotEmpty &&
+                              _doorList.isNotEmpty &&
+                              _windowList.isNotEmpty &&
+                              _coatNumberCtr.text.isNotEmpty) {
+                            showAlertDialog();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                    'Please provide walls, doors, windows, and coat details'),
+                              ),
+                            );
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -537,7 +593,7 @@ class _PaintEstimationState extends State<PaintEstimation> {
                 child: TextFormField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Provide this';
+                      return 'Provide this value';
                     }
                     return null;
                   },
@@ -716,16 +772,26 @@ class _PaintEstimationState extends State<PaintEstimation> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        double wallArea = double.parse(_wallHeightCtr.text) *
-            double.parse(_wallWidthCtr.text) *
-            _wallList.length;
-        double doorArea = double.parse(_doorHeightCtr.text) *
-            double.parse(_doorWidthCtr.text) *
-            _doorList.length;
-        double windowArea = double.parse(_windowsHeightCtr.text) *
-            double.parse(_windowsWidthCtr.text) *
-            _windowList.length;
-        totalArea = wallArea - doorArea - windowArea;
+        double? wallArea;
+        for (int i = 0; i < _wallHeightCtr.length; i++) {
+          wallArea = double.parse(_wallHeightCtr[i].text) *
+              double.parse(_wallWidthCtr[i].text) *
+              _wallList.length;
+        }
+
+        double? doorArea;
+        for (int i = 0; i < _doorHeightCtr.length; i++) {
+          doorArea = double.parse(_doorHeightCtr[i].text) *
+              double.parse(_doorWidthCtr[i].text) *
+              _doorList.length;
+        }
+        double? windowArea;
+        for (int i = 0; i < _windowsWidthCtr.length; i++) {
+          windowArea = double.parse(_windowsHeightCtr[i].text) *
+              double.parse(_windowsWidthCtr[i].text) *
+              _windowList.length;
+        }
+        totalArea = wallArea! - doorArea! - windowArea!;
         final totalPaint = totalArea! / 350;
         log(_coatNumberCtr.text);
 

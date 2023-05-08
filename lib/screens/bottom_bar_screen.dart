@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paint_app/screens/selection_screen.dart';
 
+import 'profile_screen.dart';
 import 'seller_home_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
@@ -13,7 +13,6 @@ class BottomBarScreen extends StatefulWidget {
 class _BottomBarScreenState extends State<BottomBarScreen> {
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
-
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,7 +28,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         controller: _pageController,
         children: const <Widget>[
           HomeScreen(),
-          SelectionScreen(),
+          ProfileScreen(),
         ],
         onPageChanged: (page) {
           setState(() {
@@ -40,23 +39,17 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(183, 64, 255, 1),
-                Color.fromRGBO(224, 26, 255, 0.9),
-              ],
-            )
-
-        ),
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color.fromRGBO(183, 64, 255, 1),
+            Color.fromRGBO(224, 26, 255, 0.9),
+          ],
+        )),
         child: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(Icons.home),
-                label: '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite),
                 label: '',
               ),
               BottomNavigationBarItem(
@@ -69,7 +62,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
             showSelectedLabels: true,
             showUnselectedLabels: false,
             currentIndex: _selectedIndex,
-            unselectedItemColor: const Color.fromRGBO(45,52,61,1),
+            unselectedItemColor: const Color.fromRGBO(45, 52, 61, 1),
             selectedItemColor: Colors.deepPurple,
             iconSize: 30,
             onTap: _onItemTapped,

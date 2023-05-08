@@ -1,16 +1,19 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:paint_app/services/firebase_services.dart';
 
 class HirePainter extends StatefulWidget {
   const HirePainter(
-      {Key? key, required this.paintCost, this.data, required this.serviceType})
+      {Key? key,
+      required this.paintCost,
+      this.data,
+      required this.serviceType,
+      this.title = 'Painter'})
       : super(key: key);
   final double paintCost;
   final Map<String, dynamic>? data;
   final String serviceType;
+  final String? title;
 
   @override
   State<HirePainter> createState() => _HirePainterState();
@@ -39,9 +42,9 @@ class _HirePainterState extends State<HirePainter> {
                 bottomRight: Radius.circular(40))),
         centerTitle: true,
         toolbarHeight: 60,
-        title: const Text(
-          'Hire Painter',
-          style: TextStyle(
+        title: Text(
+          'Hire ${widget.title}',
+          style: const TextStyle(
               color: Colors.white,
               fontSize: 24,
               fontWeight: FontWeight.w600,
@@ -71,42 +74,41 @@ class _HirePainterState extends State<HirePainter> {
               if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error.toString()));
               } else if (snapshot.hasData) {
-                for (int i = 0; i < snapshot.data!.length; i++) {
-                  final pCost = snapshot.data![i].get('paintCost');
-                  if (double.parse(pCost) <= widget.paintCost &&
-                      snapshot.data![i].get('service_type') ==
-                          widget.serviceType) {
-                    log('index : $i');
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final pCost = snapshot.data![index].get('paintCost');
-                        if (double.parse(pCost) <= widget.paintCost &&
-                            snapshot.data![index].get('service_type') ==
-                                widget.serviceType) {
-                          return Column(
-                            children: [
-                              const SizedBox(height: 15),
-                              containerTiles(index, snapshot.data![index]),
-                            ],
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      },
+                // for (int i = 0; i < snapshot.data!.length; i++) {
+                // final pCost = snapshot.data![i].get('paintCost');
+                //double.parse(pCost) <= widget.paintCost &&
+                // if (snapshot.data![i].get('service_type') ==
+                //     widget.serviceType) {
+                //   log('index : $i');
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    // final pCost = snapshot.data![index].get('paintCost');
+                    // if (snapshot.data![index].get('service_type') ==
+                    //     widget.serviceType) {
+                    return Column(
+                      children: [
+                        const SizedBox(height: 15),
+                        containerTiles(index, snapshot.data![index]),
+                      ],
                     );
-                  }
-                }
+                    // } else {
+                    //   return const SizedBox();
+                    // }
+                  },
+                );
+                // }
+                // }
                 // Condition not met for any item in snapshot.data
-                if (!conditionMet) {
-                  return Center(
-                    child: Text(
-                      '${widget.serviceType.toUpperCase()} is not found with your estimate',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  );
-                }
-                return const SizedBox();
+                // if (!conditionMet) {
+                //   return Center(
+                //     child: Text(
+                //       '${widget.serviceType.toUpperCase()} is not found with your estimate',
+                //       style: const TextStyle(color: Colors.white),
+                //     ),
+                //   );
+                // }
+                // return const SizedBox();
               } else {
                 return const Center(
                   child: CircularProgressIndicator(
@@ -282,10 +284,9 @@ class _HirePainterState extends State<HirePainter> {
                                                         174, 203, 246, 1)),
                                             onPressed: () {
                                               //hire button
-                                              print(AuthService.msg.value);
                                               AuthService()
-                                                  .sendRequest(
-                                                      widget.data!, data.id)
+                                                  .sendRequest(widget.data!,
+                                                      data.get('seller_id'))
                                                   .whenComplete(() {
                                                 if (AuthService.msg.value ==
                                                     'Success') {

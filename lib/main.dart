@@ -13,7 +13,7 @@ void main() async {
   );
   runApp(
     DevicePreview(
-      enabled: !kDebugMode,
+      enabled: !kReleaseMode,
       builder: (context) => const MyApp(),
     ),
   );

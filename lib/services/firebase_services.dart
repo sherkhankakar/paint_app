@@ -258,9 +258,21 @@ class AuthService {
     }
   }
 
+  static Future<List<DocumentSnapshot>> getUserDetails() async {
+    try {
+      log('uid : ${FirebaseAuth.instance.currentUser!.uid}');
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('users').get();
+      return querySnapshot.docs;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<dynamic> addService(Map<String, dynamic> data) async {
     try {
       final auth = FirebaseAuth.instance.currentUser;
+      prefs = await SharedPreferences.getInstance();
       log(auth!.email!);
 
       _firestore.collection('services').doc().set({
@@ -285,6 +297,7 @@ class AuthService {
         'wallCleanerCost': data['wallCleanerCost'],
         'seller_id': FirebaseAuth.instance.currentUser!.uid,
         'email': FirebaseAuth.instance.currentUser!.email,
+        'service_type': prefs!.getString('userType'),
       }).then((value) {
         // Document successfully created
         msg.value = 'Added Successfully';
