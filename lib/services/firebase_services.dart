@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
+class AuthService with ChangeNotifier {
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static ValueNotifier msg = ValueNotifier('');
   static const apiKey = 'AIzaSyCrQM3WFg8FbAMmdbi163CLs6bic8sEoyc';
@@ -247,7 +247,7 @@ class AuthService {
     // }
   }
 
-  static Future<List<DocumentSnapshot>> fetchRequests() async {
+  Future<List<DocumentSnapshot>> fetchRequests() async {
     try {
       log('uid : ${FirebaseAuth.instance.currentUser!.uid}');
       QuerySnapshot querySnapshot =
@@ -347,8 +347,8 @@ class AuthService {
         msg.value = e.toString();
       });
     } catch (e) {
-      throw Exception(e);
       print('Error deleting document: $e');
+      throw Exception(e);
     }
   }
 }

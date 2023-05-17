@@ -80,30 +80,30 @@ class _HirePainterState extends State<HirePainter> {
               if (snapshot.hasError) {
                 return Center(child: Text(snapshot.error.toString()));
               } else if (snapshot.hasData) {
-                 for (int i = 0; i < snapshot.data!.length; i++) {
-                // final pCost = snapshot.data![i].get('paintCost');
-                //double.parse(pCost) <= widget.paintCost &&
-                if (snapshot.data![i].get('service_type') ==
-                    widget.serviceType) {
-                //  log('index : $i');
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    // final pCost = snapshot.data![index].get('paintCost');
-                    if (snapshot.data![index].get('service_type') ==
-                        widget.serviceType) {
-                    return Column(
-                      children: [
-                        const SizedBox(height: 15),
-                        containerTiles(index, snapshot.data![index]),
-                      ],
+                for (int i = 0; i < snapshot.data!.length; i++) {
+                  // final pCost = snapshot.data![i].get('paintCost');
+                  //double.parse(pCost) <= widget.paintCost &&
+                  if (snapshot.data![i].get('service_type') ==
+                      widget.serviceType) {
+                    //  log('index : $i');
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        // final pCost = snapshot.data![index].get('paintCost');
+                        if (snapshot.data![index].get('service_type') ==
+                            widget.serviceType) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 15),
+                              containerTiles(index, snapshot.data![index]),
+                            ],
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
                     );
-                     } else {
-                       return const SizedBox();
-                     }
-                  },
-                );
-                }
+                  }
                 }
                 // Condition not met for any item in snapshot.data
                 if (!conditionMet) {

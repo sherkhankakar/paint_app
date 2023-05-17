@@ -24,71 +24,6 @@ class _SellerCategoryState extends State<SellerCategory> {
             Color.fromRGBO(82, 0, 255, 0.77)
           ],
         )),
-<<<<<<< HEAD
-        child: RefreshIndicator(
-          onRefresh: () async {
-            setState(() {});
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(height: 50),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      "assets/images/cons.png",
-                      height: 45,
-                      width: 160,
-                    ),
-                    Image.asset(
-                      "assets/images/est.png",
-                      height: 25,
-                      width: 120,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 30),
-                Stack(
-                  children: [
-                    Transform.translate(
-                      offset: const Offset(0, 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(
-                                        userType: 'painter',
-                                      )));
-                        },
-                        child: Container(
-                          height: 140,
-                          //width: 250,
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                                image: AssetImage('assets/images/painter.jpg'),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          // child: Center(
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.circular(20),
-                          //     child: Image.asset(
-                          //       'assets/images/painter.jpg',height: 200,
-                          //
-                          //     ),
-                          //   ),
-                          // ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        height: 35,
-                        width: 130,
-=======
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -138,73 +73,49 @@ class _SellerCategoryState extends State<SellerCategory> {
                         height: 120,
                         //width: 250,
                         margin: const EdgeInsets.symmetric(horizontal: 30),
->>>>>>> b5bcf5f957c5f9aad2039f463351f3814c7a197a
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromRGBO(143, 0, 255, 1),
-                                Color.fromRGBO(13, 179, 182, 1)
-                              ],
-                            )),
-                        child: const Center(
-                          child: Text(
-                            'Painter',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Sansita'),
-                          ),
+                          image: const DecorationImage(
+                              image: AssetImage('assets/images/painter.jpg'),
+                              fit: BoxFit.cover),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        // child: Center(
+                        //   child: ClipRRect(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     child: Image.asset(
+                        //       'assets/images/painter.jpg',height: 200,
+                        //
+                        //     ),
+                        //   ),
+                        // ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      height: 35,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(143, 0, 255, 1),
+                              Color.fromRGBO(13, 179, 182, 1)
+                            ],
+                          )),
+                      child: const Center(
+                        child: Text(
+                          'Painter',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Sansita'),
                         ),
                       ),
                     ),
-<<<<<<< HEAD
-                  ],
-                ),
-                const SizedBox(height: 40),
-                Stack(
-                  children: [
-                    Transform.translate(
-                      offset: const Offset(0, 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(
-                                        userType: 'plumber',
-                                      )));
-                        },
-                        child: Container(
-                          height: 140,
-                          //width: 250,
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                                image: AssetImage('assets/images/plumber.jpg'),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          // child: Center(
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.circular(20),
-                          //     child: Image.asset(
-                          //       'assets/images/painter.jpg',height: 200,
-                          //
-                          //     ),
-                          //   ),
-                          // ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        height: 35,
-                        width: 130,
-=======
                   ),
                 ],
               ),
@@ -219,8 +130,8 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
-                                  userType: 'Tile Installer',
-                                )));
+                                      userType: 'tile installer',
+                                    )));
                       },
                       child: Container(
                         height: 120,
@@ -290,92 +201,49 @@ class _SellerCategoryState extends State<SellerCategory> {
                         height: 120,
                         //width: 250,
                         margin: const EdgeInsets.symmetric(horizontal: 30),
->>>>>>> b5bcf5f957c5f9aad2039f463351f3814c7a197a
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromRGBO(143, 0, 255, 1),
-                                Color.fromRGBO(13, 179, 182, 1)
-                              ],
-                            )),
-                        child: const Center(
-                          child: Text(
-                            'Plumber',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Sansita'),
-                          ),
+                          image: const DecorationImage(
+                              image: AssetImage('assets/images/plumber.jpg'),
+                              fit: BoxFit.cover),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        // child: Center(
+                        //   child: ClipRRect(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     child: Image.asset(
+                        //       'assets/images/painter.jpg',height: 200,
+                        //
+                        //     ),
+                        //   ),
+                        // ),
+                      ),
+                    ),
+                  ),
+                  Center(
+                    child: Container(
+                      height: 35,
+                      width: 130,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: const LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromRGBO(143, 0, 255, 1),
+                              Color.fromRGBO(13, 179, 182, 1)
+                            ],
+                          )),
+                      child: const Center(
+                        child: Text(
+                          'Plumber',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Sansita'),
                         ),
                       ),
                     ),
-<<<<<<< HEAD
-                  ],
-                ),
-                const SizedBox(height: 40),
-                Stack(
-                  children: [
-                    Transform.translate(
-                      offset: const Offset(0, 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(
-                                        userType: 'tile installer',
-                                      )));
-                        },
-                        child: Container(
-                          height: 140,
-                          //width: 250,
-                          margin: const EdgeInsets.symmetric(horizontal: 30),
-                          decoration: BoxDecoration(
-                            image: const DecorationImage(
-                                image: AssetImage('assets/images/tile.jpg'),
-                                fit: BoxFit.cover),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          // child: Center(
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.circular(20),
-                          //     child: Image.asset(
-                          //       'assets/images/painter.jpg',height: 200,
-                          //
-                          //     ),
-                          //   ),
-                          // ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Container(
-                        height: 35,
-                        width: 130,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            gradient: const LinearGradient(
-                              begin: Alignment.centerLeft,
-                              end: Alignment.centerRight,
-                              colors: [
-                                Color.fromRGBO(143, 0, 255, 1),
-                                Color.fromRGBO(13, 179, 182, 1)
-                              ],
-                            )),
-                        child: const Center(
-                          child: Text(
-                            'Tile Installer',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Sansita'),
-                          ),
-=======
                   ),
                 ],
               ),
@@ -390,8 +258,8 @@ class _SellerCategoryState extends State<SellerCategory> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const LoginScreen(
-                                  userType: 'Electrician',
-                                )));
+                                      userType: 'electrician',
+                                    )));
                       },
                       child: Container(
                         height: 120,
@@ -399,7 +267,8 @@ class _SellerCategoryState extends State<SellerCategory> {
                         margin: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           image: const DecorationImage(
-                              image: AssetImage('assets/images/electrician.jpg'),
+                              image:
+                                  AssetImage('assets/images/electrician.jpg'),
                               fit: BoxFit.cover),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -437,14 +306,13 @@ class _SellerCategoryState extends State<SellerCategory> {
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
                               fontFamily: 'Sansita'),
->>>>>>> b5bcf5f957c5f9aad2039f463351f3814c7a197a
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/screens/get_started_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../components/estimated_costs.dart';
 import '../services/firebase_services.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             )),
             child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
-              future: AuthService.fetchRequests(),
+              future: Provider.of<AuthService>(context).fetchRequests(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return Center(child: Text(snapshot.error.toString()));
