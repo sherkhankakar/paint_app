@@ -1,11 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:paint_app/screens/get_started_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../components/estimated_costs.dart';
 import '../services/firebase_services.dart';
@@ -104,68 +105,63 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: const Icon(Icons.add),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          setState(() {});
-        },
-        child: Container(
-            height: double.maxFinite,
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color.fromRGBO(23, 213, 255, 1),
-                Color.fromRGBO(224, 26, 255, 0.9),
-              ],
-            )),
-            child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
-              future: Provider.of<AuthService>(context).fetchRequests(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else if (snapshot.hasData) {
-                  for (int i = 0; i < snapshot.data!.length; i++) {
-                    if (snapshot.data![i].get('seller_id') ==
-                        FirebaseAuth.instance.currentUser!.uid) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if (snapshot.data![index].get('seller_id') ==
-                              FirebaseAuth.instance.currentUser!.uid) {
-                            return Column(
-                              children: [
-                                const SizedBox(height: 15),
-                                containerTile(index, snapshot.data![index]),
-                              ],
-                            );
-                          } else {
-                            return const SizedBox();
-                          }
-                        },
-                      );
-                    }
-                  }
-                  // Condition not met for any item in snapshot.data
-                  if (!conditionMet) {
-                    return const Center(
-                      child: Text(
-                        'You have 0 requests',
-                        style: TextStyle(color: Colors.white),
-                      ),
+      body: Container(
+          height: double.maxFinite,
+          decoration: const BoxDecoration(
+              gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color.fromRGBO(23, 213, 255, 1),
+              Color.fromRGBO(224, 26, 255, 0.9),
+            ],
+          )),
+          child: FutureBuilder<List<DocumentSnapshot<Object?>>>(
+            future: AuthService().fetchRequests(),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              } else if (snapshot.hasData) {
+                for (int i = 0; i < snapshot.data!.length; i++) {
+                  if (snapshot.data![i].get('seller_id') ==
+                      FirebaseAuth.instance.currentUser!.uid) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        if (snapshot.data![index].get('seller_id') ==
+                            FirebaseAuth.instance.currentUser!.uid) {
+                          return Column(
+                            children: [
+                              const SizedBox(height: 15),
+                              containerTile(index, snapshot.data![index]),
+                            ],
+                          );
+                        } else {
+                          return const SizedBox();
+                        }
+                      },
                     );
                   }
-                  return const SizedBox();
-                } else {
+                }
+                // Condition not met for any item in snapshot.data
+                if (!conditionMet) {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
+                    child: Text(
+                      'You have 0 requests',
+                      style: TextStyle(color: Colors.white),
                     ),
                   );
                 }
-              },
-            )),
-      ),
+                return const SizedBox();
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                );
+              }
+            },
+          )),
     );
   }
 
@@ -313,19 +309,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8)),
                                         title: const Text('Buyer Contact Info'),
                                         content: const Text(
                                           'Contact buyer through WhatsApp',
                                           textAlign: TextAlign.center,
                                         ),
                                         actions: [
-                                          IconButton(
-                                            onPressed: () {
-                                              // AuthService()
-                                              //     .deleteRequest(service.id)
-                                            },
-                                            icon: const FaIcon(
-                                                FontAwesomeIcons.whatsapp),
+                                          Center(
+                                            child: IconButton(
+                                              onPressed: () {
+                                                openWhatsapp(
+                                                    context: context,
+                                                    text: 'hi',
+                                                    number: '+923085991831');
+                                              },
+                                              icon: const FaIcon(
+                                                FontAwesomeIcons.whatsapp,
+                                                color: Colors.green,
+                                                size: 40,
+                                              ),
+                                            ),
                                           ),
                                         ]);
                                   });
@@ -527,5 +533,33 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void openWhatsapp(
+      {required BuildContext context,
+      required String text,
+      required String number}) async {
+    var whatsappURlAndroid = "whatsapp://send?phone=+923085991831&text=$text";
+    var whatsappURLIos =
+        "https://wa.me/+923085991831?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(
+          whatsappURLIos,
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Whatsapp not installed")));
+      }
+    } else {
+      // android , web
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Whatsapp not installed")));
+      }
+    }
   }
 }
