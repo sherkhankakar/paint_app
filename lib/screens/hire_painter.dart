@@ -307,9 +307,10 @@ class _HirePainterState extends State<HirePainter> {
                                                 } else {
                                                   ScaffoldMessenger.of(context)
                                                       .showSnackBar(
-                                                    SnackBar(
-                                                      content: Text(AuthService
-                                                          .msg.value),
+                                                    const SnackBar(
+                                                      content: Text(
+                                                        'error occured try again later',
+                                                      ),
                                                     ),
                                                   );
                                                 }

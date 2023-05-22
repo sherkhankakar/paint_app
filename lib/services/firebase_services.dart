@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService with ChangeNotifier {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
   static ValueNotifier msg = ValueNotifier('');
   static const apiKey = 'AIzaSyCrQM3WFg8FbAMmdbi163CLs6bic8sEoyc';
@@ -28,10 +29,16 @@ class AuthService with ChangeNotifier {
       );
 
       if (userCredential.user != null) {
+        final data = await _firestore
+            .collection('users')
+            .doc(userCredential.user!.uid)
+            .get();
+
         prefs!.setString('email', userCredential.user!.email!);
         prefs!.setString('userType', userType);
         prefs!.setString('uid', userCredential.user!.uid.toString());
-        prefs!.setString('phone', userCredential.user!.phoneNumber ?? '');
+        prefs!.setString('phone', data.get('phone_number'));
+        print(data.get('phone_number'));
       }
       print(userCredential.user);
       return userCredential;
@@ -150,7 +157,6 @@ class AuthService with ChangeNotifier {
     // }
   }
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   void createUserData(
     String userId,
     String name,
@@ -166,6 +172,7 @@ class AuthService with ChangeNotifier {
         'address': addres,
         'phone_number': mobile,
         'userType': userType,
+        'imageUploaded': false
       },
     );
   }
@@ -258,12 +265,18 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  static Future<List<DocumentSnapshot>> getUserDetails() async {
+  DocumentSnapshot<Map<String, dynamic>>? _userData;
+  DocumentSnapshot<Map<String, dynamic>>? get userData => _userData;
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails() async {
     try {
-      log('uid : ${FirebaseAuth.instance.currentUser!.uid}');
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('users').get();
-      return querySnapshot.docs;
+      final data = await _firestore
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
+
+      _userData = data;
+      notifyListeners();
+      return data;
     } catch (e) {
       throw Exception(e);
     }

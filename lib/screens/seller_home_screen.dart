@@ -323,8 +323,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                               onPressed: () {
                                                 openWhatsapp(
                                                     context: context,
-                                                    text: 'hi',
-                                                    number: '+923085991831');
+                                                    text:
+                                                        'Construction Estimation App:\nMessage From Seller',
+                                                    number:
+                                                        service.get('phone'));
                                               },
                                               icon: const FaIcon(
                                                 FontAwesomeIcons.whatsapp,
@@ -539,9 +541,8 @@ class _HomeScreenState extends State<HomeScreen> {
       {required BuildContext context,
       required String text,
       required String number}) async {
-    var whatsappURlAndroid = "whatsapp://send?phone=+923085991831&text=$text";
-    var whatsappURLIos =
-        "https://wa.me/+923085991831?text=${Uri.tryParse(text)}";
+    var whatsappURlAndroid = "whatsapp://send?phone=$number&text=$text";
+    var whatsappURLIos = "https://wa.me/+92$number?text=${Uri.tryParse(text)}";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
