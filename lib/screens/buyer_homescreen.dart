@@ -7,6 +7,8 @@ import 'package:paint_app/screens/plumbing_estimation.dart';
 import 'package:paint_app/services/firebase_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'profile_screen.dart';
+
 class BuyerHomeScreen extends StatefulWidget {
   const BuyerHomeScreen({Key? key}) : super(key: key);
 
@@ -53,6 +55,14 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                     color: Colors.black54),
               ]),
         ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (ctx) => const ProfileScreen()));
+              },
+              icon: const Icon(Icons.person_outline))
+        ],
       ),
       body: Container(
         height: double.maxFinite,
@@ -73,11 +83,10 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  gridContainers(
-                      'Paint\nEstimates', 'assets/images/painter.jpg',
+                  gridContainers('Paint\nEstimates', 'assets/images/paint.jpeg',
                       page: const PaintEstimation()),
                   gridContainers(
-                      'Marbles\nEstimates', 'assets/images/painter.jpg',
+                      'Marbles\nEstimates', 'assets/images/tile.jpeg',
                       page: const MarbleEstimation())
                 ],
               ),
@@ -86,11 +95,11 @@ class _BuyerHomeScreenState extends State<BuyerHomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   gridContainers(
-                      'Electrician\nEstimates', 'assets/images/painter.jpg',
+                      'Plumbing\nEstimates', 'assets/images/plumber.jpeg',
+                      page: const PlumbingEstimation()),
+                  gridContainers('Electrician\nEstimates',
+                      'assets/images/electrician.jpeg',
                       page: const ElectricianEstimation()),
-                  gridContainers(
-                      'Plumbing\nEstimates', 'assets/images/plumber.jpg',
-                      page: const PlumbingEstimation())
                 ],
               ),
             ],
