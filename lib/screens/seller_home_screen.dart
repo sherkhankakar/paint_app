@@ -251,21 +251,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       // if (isEstimatesShowing == true)
                       //   rowTiles('Brushes', service.get('brushQty')),
                       if (userDetails == true)
-                        rowTiles(
-                            'Wall Area', service.get('wall_area') + ' sqft'),
+                        rowTiles('Wall Area',
+                            service.get('wall_area') + ' per sqft'),
                       // if (isEstimatesShowing == true)
                       //   rowTiles('Door Area', service.get('doorQty') + ' sqft'),
                       // if (isEstimatesShowing == true)
                       //   rowTiles(
                       //       'Window Area', service.get('windowQty') + ' sqft'),
                       if (userDetails == true)
-                        rowTiles(
-                            'Door Area', service.get('door_area') + ' sqft'),
+                        rowTiles('Door Area',
+                            service.get('door_area') + ' per sqft'),
                       if (userDetails == true)
                         rowTiles('Window Area',
-                            service.get('window_area') + ' sqft'),
+                            service.get('window_area') + ' per sqft'),
                       if (userDetails == true)
-                        rowTiles('Coat', service.get('coat') + ' x'),
+                        rowTiles('Layers', service.get('coat') + ' x'),
                       if (userDetails == true)
                         rowTiles('Paint Type', service.get('paint_type')),
                       if (userDetails == true)
@@ -274,18 +274,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             service.get('paint_cost').toStringAsFixed(2) +
                                 ' PKR'),
                       const SizedBox(height: 5),
-                      if (isEstimatesShowing == false &&
-                          showCalculatedEstimate == false)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: const [
-                            FaIcon(FontAwesomeIcons.whatsapp),
-                            FaIcon(
-                              FontAwesomeIcons.phone,
-                              size: 20,
-                            ),
-                          ],
-                        ),
+                      // if (isEstimatesShowing == false &&
+                      //     showCalculatedEstimate == false)
+                      //   const Row(
+                      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       FaIcon(FontAwesomeIcons.whatsapp),
+                      //       FaIcon(
+                      //         FontAwesomeIcons.phone,
+                      //         size: 20,
+                      //       ),
+                      //     ],
+                      //   ),
                       const SizedBox(height: 5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -318,21 +318,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                           textAlign: TextAlign.center,
                                         ),
                                         actions: [
-                                          Center(
-                                            child: IconButton(
-                                              onPressed: () {
-                                                openWhatsapp(
-                                                    context: context,
-                                                    text:
-                                                        'Construction Estimation App:\nMessage From Seller',
-                                                    number:
-                                                        service.get('phone'));
-                                              },
-                                              icon: const FaIcon(
-                                                FontAwesomeIcons.whatsapp,
-                                                color: Colors.green,
-                                                size: 40,
-                                              ),
+                                          IconButton(
+                                            onPressed: () {
+                                              openWhatsapp(
+                                                  context: context,
+                                                  text:
+                                                      'Construction Estimation App:\nMessage From Seller',
+                                                  number: service.get('phone'));
+                                            },
+                                            icon: const FaIcon(
+                                              FontAwesomeIcons.whatsapp,
+                                              color: Colors.green,
+                                              size: 40,
+                                            ),
+                                          ),
+                                          IconButton(
+                                            onPressed: () {
+                                              openDialer(service.get('phone'));
+                                            },
+                                            icon: const FaIcon(
+                                              FontAwesomeIcons.phone,
+                                              color: Colors.green,
+                                              size: 28,
                                             ),
                                           ),
                                         ]);
@@ -487,8 +494,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           if (isEstimatesShowing)
-            Column(
-              children: const [
+            const Column(
+              children: [
                 Text(
                   'test',
                   style: TextStyle(
@@ -535,6 +542,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  void openDialer(String phoneNumber) async {
+    if (await canLaunchUrl(Uri.parse('tel:$phoneNumber'))) {
+      await launchUrl(Uri.parse('tel:$phoneNumber'));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Invalid number")));
+    }
   }
 
   void openWhatsapp(

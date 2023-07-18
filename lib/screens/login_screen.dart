@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../services/firebase_services.dart';
 import 'bottom_bar_screen.dart';
 import 'buyer_homescreen.dart';
-import 'forgot_password.dart';
+import 'reset_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key, required this.userType});
@@ -73,15 +73,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 160,
                 ),
                 Transform.translate(
-                  offset: const Offset(2,-2),
-                  child: const Text('Estimation',style: TextStyle(
-                      shadows: <Shadow>[
-                        Shadow(
-                            offset: Offset(0, 2.0),
-                            blurRadius: 5.0,
-                            color: Colors.black54),
-                      ],
-                      color: Color.fromRGBO(204, 204, 204, 1), fontSize: 23, fontFamily: 'Sansita',fontWeight: FontWeight.w600),),
+                  offset: const Offset(2, -2),
+                  child: const Text(
+                    'Estimation',
+                    style: TextStyle(
+                        shadows: <Shadow>[
+                          Shadow(
+                              offset: Offset(0, 2.0),
+                              blurRadius: 5.0,
+                              color: Colors.black54),
+                        ],
+                        color: Color.fromRGBO(204, 204, 204, 1),
+                        fontSize: 23,
+                        fontFamily: 'Sansita',
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
               ],
             ),
@@ -297,7 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: InkWell(
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (_) => const ForgotPassword()),
+                                  builder: (_) => const ResetPasswordScreen()),
                             ),
                             child: Container(
                               margin: const EdgeInsets.only(top: 10),

@@ -930,11 +930,11 @@ class _MarbleEstimationState extends State<MarbleEstimation> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        rowTiles('Tile Size', '$tileSize sq/cm'),
+                        rowTiles('Tile Size', '$tileSize per sqcm'),
                         const SizedBox(height: 10),
                         rowTiles('Tile Gap', '${_tileGapCtr.text} cm'),
                         const SizedBox(height: 10),
-                        rowTiles('Total Area', '$totalArea sq/ft'),
+                        rowTiles('Total Area', '$totalArea per sqft'),
                         const SizedBox(height: 10),
                         rowTiles('Total Tiles',
                             '${totalTiles.toStringAsFixed(2)} tiles'),

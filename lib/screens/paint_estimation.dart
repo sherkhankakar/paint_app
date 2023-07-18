@@ -31,10 +31,13 @@ class _PaintEstimationState extends State<PaintEstimation> {
   final List<MyDataObject> _windowList = [];
 
   final List<String> paintTypes = [
-    'Type 1',
-    'Type 2',
-    'Type 3',
-    'Type 4',
+    'Emulsion Paint',
+    'Enamel Paint',
+    'Distemper Paint',
+    'Texture Paint',
+    'Weather-resistant Paint',
+    'Epoxy Paint',
+    'Anti-Mold Paint',
   ];
   String? selectedValue;
 
@@ -817,9 +820,9 @@ class _PaintEstimationState extends State<PaintEstimation> {
                       children: [
                         rowTiles('Paint Type', selectedValue!),
                         const SizedBox(height: 10),
-                        rowTiles('Coat', _coatNumberCtr.text),
+                        rowTiles('Layers', _coatNumberCtr.text),
                         const SizedBox(height: 10),
-                        rowTiles('Total Area', '$totalArea sqft'),
+                        rowTiles('Total Area', '$totalArea per sqft'),
                         const SizedBox(height: 10),
                         rowTiles('Total Paint',
                             '${totalPaint.toStringAsFixed(2)} gillion'),
